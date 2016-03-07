@@ -27,8 +27,11 @@ namespace Ruler
 		private MenuItem _verticalMenuItem;
 		private MenuItem _toolTipMenuItem;
 		private MenuItem _lockedMenuItem;
+        private static Color _TickColor = ColorTranslator.FromHtml("#3E2815");
+        private static Color _CursorColor = Color.FromArgb(200, _TickColor);
 
-		public MainForm()
+
+        public MainForm()
 		{
 			RulerInfo rulerInfo = RulerInfo.GetDefaultRulerInfo();
 
@@ -78,16 +81,17 @@ namespace Ruler
 			this.Icon = ((Icon)(resources.GetObject("$this.Icon")));
 
 			this.SetUpMenu();
+            
 
-			this.Text = "Ruler";
-			this.BackColor = Color.White;
+            this.Text = "Ruler";
+			this.BackColor = Color.LightYellow;
 
 			rulerInfo.CopyInto(this);
 
 			this.FormBorderStyle = FormBorderStyle.None;
 
 			this.ContextMenu = _menu;
-			this.Font = new Font("Tahoma", 10);
+            this.Font = new Font("Segoe UI", 9, FontStyle.Bold);
 
 			this.SetStyle(ControlStyles.DoubleBuffer | ControlStyles.UserPaint | ControlStyles.AllPaintingInWmPaint, true);
 		}
@@ -107,7 +111,8 @@ namespace Ruler
 			this._verticalMenuItem = this.AddMenuItem("Vertical");
 			this._toolTipMenuItem = this.AddMenuItem("Tool Tip");
 			MenuItem opacityMenuItem = this.AddMenuItem("Opacity");
-			this._lockedMenuItem = this.AddMenuItem("Lock resizing", Shortcut.None, this.LockHandler);
+            MenuItem colorMenuItem = this.AddMenuItem("Color");
+            this._lockedMenuItem = this.AddMenuItem("Lock resizing", Shortcut.None, this.LockHandler);
 			this.AddMenuItem("Set size...", Shortcut.None, this.SetWidthHeightHandler);
 			this.AddMenuItem("Duplicate", Shortcut.None, this.DuplicateHandler);
 			this.AddMenuItem("-");
@@ -121,7 +126,18 @@ namespace Ruler
 				subMenu.Click += new EventHandler(OpacityMenuHandler);
 				opacityMenuItem.MenuItems.Add(subMenu);
 			}
-		}
+
+            // Add colors to color menus
+            string[] BGColors = new string[] { "Yellow", "Blue", "Red", "Green" };
+            for (int i = 0; i < BGColors.Length; i++)
+            {
+                MenuItem subMenu = new MenuItem(BGColors[i]);
+                subMenu.Click += new EventHandler(ColorMenuHandler);
+                colorMenuItem.MenuItems.Add(subMenu);
+            }
+        }
+
+
 
 		private void SetWidthHeightHandler(object sender, EventArgs e)
 		{
@@ -225,7 +241,11 @@ namespace Ruler
 				}
 			}
 
-			base.OnMouseMove(e);
+            Invalidate();
+           
+
+
+            base.OnMouseMove(e);
 		}
 
 		protected override void OnResize(EventArgs e)
@@ -274,12 +294,12 @@ namespace Ruler
 					}
 					else
 					{
-						Left += 1;
+						Left += 5;
 					}
 				}
 				else
 				{
-					Left += 5;
+					Left += 1;
 				}
 			}
 			else if (e.KeyCode == Keys.Left)
@@ -292,12 +312,12 @@ namespace Ruler
 					}
 					else
 					{
-						Left -= 1;
+						Left -= 5;
 					}
 				}
 				else
 				{
-					Left -= 5;
+					Left -= 1;
 				}
 			}
 			else if (e.KeyCode == Keys.Up)
@@ -310,12 +330,12 @@ namespace Ruler
 					}
 					else
 					{
-						Top -= 1;
+						Top -= 5;
 					}
 				}
 				else
 				{
-					Top -= 5;
+					Top -= 1;
 				}
 			}
 			else if (e.KeyCode == Keys.Down)
@@ -328,12 +348,12 @@ namespace Ruler
 					}
 					else
 					{
-						Top += 1;
+						Top += 5;
 					}
 				}
 				else
 				{
-					Top += 5;
+					Top += 1;
 				}
 			}
 		}
@@ -429,21 +449,24 @@ namespace Ruler
 				width = Height;
 			}
 
+            
+
 			DrawRuler(graphics, width, height);
 
 			base.OnPaint(e);
 		}
 
+        
+
 		private void DrawRuler(Graphics g, int formWidth, int formHeight)
 		{
 			// Border
-			g.DrawRectangle(Pens.Black, 0, 0, formWidth - 1, formHeight - 1);
+			g.DrawRectangle(new Pen(_TickColor), 0, 0, formWidth - 1, formHeight - 1);
 
-			// Width
-			g.DrawString(formWidth + " pixels", Font, Brushes.Black, 10, (formHeight / 2) - (Font.Height / 2));
+			
 
-			// Ticks
-			for (int i = 0; i < formWidth; i++)
+            // Ticks
+            for (int i = 0; i < formWidth; i++)
 			{
 				if (i % 2 == 0)
 				{
@@ -465,24 +488,60 @@ namespace Ruler
 					DrawTick(g, i, formHeight, tickHeight);
 				}
 			}
-		}
 
-		private static void DrawTick(Graphics g, int xPos, int formHeight, int tickHeight)
+            DrawCursor(g, formWidth, formHeight);
+
+
+            Point pos = PointToClient(MousePosition);
+            int taX = 10;
+            int taY = formHeight - (Font.Height * 3);
+            int tbX = taX;
+            int tbY = formHeight - (Font.Height * 2);
+            string dimensionLabelText = formWidth + "W x " + formHeight + "H px";
+            string cursorLabelText = pos.X + "px";
+
+            // Rotate the labels if we are Vertical
+            if (IsVertical)
+            {
+                g.RotateTransform(-90);
+                taX = (formHeight * -1) + 10;
+                taY = formWidth - (Font.Height * 3);
+                tbX = (formHeight * -1) + 10;
+                tbY = formWidth - (Font.Height * 2);
+                dimensionLabelText = formHeight + "W x " + formWidth + "H px";
+                cursorLabelText = pos.Y + "px";
+            }
+
+            // Dimensions labels
+            g.DrawString(dimensionLabelText, Font, new SolidBrush(_TickColor), taX, taY);
+            g.DrawString(cursorLabelText, Font, new SolidBrush(_CursorColor), tbX, tbY);
+
+        }
+
+        private void DrawCursor(Graphics g, int formWidth, int formHeight)
+        {
+            Point p = PointToClient(MousePosition);
+            int op = IsVertical ? p.Y : p.X;
+            g.DrawLine(new Pen(_CursorColor), new Point(op, 0), new Point(op, formHeight));
+        }
+
+        private static void DrawTick(Graphics g, int xPos, int formHeight, int tickHeight)
 		{
+ 
 			// Top
-			g.DrawLine(Pens.Black, xPos, 0, xPos, tickHeight);
+			g.DrawLine(new Pen(_TickColor), xPos, 0, xPos, tickHeight);
 
 			// Bottom
-			g.DrawLine(Pens.Black, xPos, formHeight, xPos, formHeight - tickHeight);
+			//g.DrawLine(Pens.Black, xPos, formHeight, xPos, formHeight - tickHeight);
 		}
 
 		private void DrawTickLabel(Graphics g, string text, int xPos, int formHeight, int height)
 		{
 			// Top
-			g.DrawString(text, Font, Brushes.Black, xPos, height);
+			g.DrawString(text, Font, new SolidBrush(_TickColor), xPos, height);
 
 			// Bottom
-			g.DrawString(text, Font, Brushes.Black, xPos, formHeight - height - Font.Height);
+			//g.DrawString(text, Font, Brushes.Black, xPos, formHeight - height - Font.Height);
 		}
 
 		private static void Main(params string[] args)
@@ -510,6 +569,26 @@ namespace Ruler
 			Opacity = double.Parse(mi.Text.Replace("%", "")) / 100;
 		}
 
+        private void ColorMenuHandler(object sender, EventArgs e)
+        {
+            MenuItem mi = (MenuItem)sender;
+            switch (mi.Text)
+            {
+                case "Yellow":
+                    BackColor = Color.LightYellow;
+                    break;
+                case "Blue":
+                    BackColor = Color.LightBlue;
+                    break;
+                case "Red":
+                    BackColor = Color.LightSalmon;
+                    break;
+                case "Green":
+                    BackColor = Color.LightGreen;
+                    break;
+            }
+        }
+
 		private void MenuHandler(object sender, EventArgs e)
 		{
 			MenuItem mi = (MenuItem)sender;
@@ -534,7 +613,7 @@ namespace Ruler
 					break;
 
 				case "About...":
-					string message = string.Format("Ruler v{0} by Jeff Key\nwww.sliver.com\nIcon by Kristen Magee @ www.kbecca.com", Application.ProductVersion);
+					string message = string.Format("Ruler v{0} by Jeff Key\nwww.sliver.com", Application.ProductVersion);
 					MessageBox.Show(message, "About Ruler", MessageBoxButtons.OK, MessageBoxIcon.Information);
 					break;
 

@@ -89,8 +89,8 @@ namespace Ruler
 		{
 			RulerInfo rulerInfo = new RulerInfo();
 
-			rulerInfo.Width = 400;
-			rulerInfo.Height = 75;
+			rulerInfo.Width = 500;
+			rulerInfo.Height = 100;
 			rulerInfo.Opacity = 0.65;
 			rulerInfo.ShowToolTip = false;
 			rulerInfo.IsLocked = false;
