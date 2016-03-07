@@ -242,9 +242,7 @@ namespace Ruler
 			}
 
             Invalidate();
-           
-
-
+          
             base.OnMouseMove(e);
 		}
 
@@ -526,22 +524,13 @@ namespace Ruler
         }
 
         private static void DrawTick(Graphics g, int xPos, int formHeight, int tickHeight)
-		{
- 
-			// Top
+		{ 
 			g.DrawLine(new Pen(_TickColor), xPos, 0, xPos, tickHeight);
-
-			// Bottom
-			//g.DrawLine(Pens.Black, xPos, formHeight, xPos, formHeight - tickHeight);
 		}
 
 		private void DrawTickLabel(Graphics g, string text, int xPos, int formHeight, int height)
 		{
-			// Top
 			g.DrawString(text, Font, new SolidBrush(_TickColor), xPos, height);
-
-			// Bottom
-			//g.DrawString(text, Font, Brushes.Black, xPos, formHeight - height - Font.Height);
 		}
 
 		private static void Main(params string[] args)
