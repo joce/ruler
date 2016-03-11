@@ -139,7 +139,7 @@ namespace Ruler
 
         private Icon GetIcon(string name)
         {
-            return (Icon)(_resources.GetObject("LockIcon"));
+            return (Icon)(_resources.GetObject(name));
         }
 
         private void SetWidthHeightHandler(object sender, EventArgs e)

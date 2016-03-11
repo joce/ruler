@@ -131,8 +131,6 @@
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Content Include="Assets\lock.png" />
-    <Content Include="Assets\unlock-alt.png" />
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
       <SubType>Designer</SubType>

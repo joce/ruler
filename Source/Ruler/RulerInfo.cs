@@ -90,7 +90,7 @@ namespace Ruler
 			RulerInfo rulerInfo = new RulerInfo();
 
 			rulerInfo.Width = 500;
-			rulerInfo.Height = 100;
+			rulerInfo.Height = 126;
 			rulerInfo.Opacity = 0.65;
 			rulerInfo.ShowToolTip = false;
 			rulerInfo.IsLocked = false;
