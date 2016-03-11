@@ -18,7 +18,8 @@ namespace Ruler
 		#endregion ResizeRegion enum
 
 		private ToolTip _toolTip = new ToolTip();
-		private Point _offset;
+        private ResourceManager _resources = new ResourceManager(typeof(MainForm));
+        private Point _offset;
 		private Rectangle _mouseDownRect;
 		private int _resizeBorderWidth = 5;
 		private Point _mouseDownPoint;
@@ -29,6 +30,7 @@ namespace Ruler
 		private MenuItem _lockedMenuItem;
         private static Color _TickColor = ColorTranslator.FromHtml("#3E2815");
         private static Color _CursorColor = Color.FromArgb(200, _TickColor);
+        private static Region _LockIconRegion;
 
 
         public MainForm()
@@ -76,13 +78,11 @@ namespace Ruler
 		{
 			this.SetStyle(ControlStyles.ResizeRedraw, true);
 			this.UpdateStyles();
-
-			ResourceManager resources = new ResourceManager(typeof(MainForm));
-			this.Icon = ((Icon)(resources.GetObject("$this.Icon")));
+            
+			this.Icon = GetIcon("$this.Icon");
 
 			this.SetUpMenu();
             
-
             this.Text = "Ruler";
 			this.BackColor = Color.LightYellow;
 
@@ -137,9 +137,12 @@ namespace Ruler
             }
         }
 
+        private Icon GetIcon(string name)
+        {
+            return (Icon)(_resources.GetObject("LockIcon"));
+        }
 
-
-		private void SetWidthHeightHandler(object sender, EventArgs e)
+        private void SetWidthHeightHandler(object sender, EventArgs e)
 		{
 			SetSizeForm form = new SetSizeForm(this.Width, this.Height);
 
@@ -161,6 +164,7 @@ namespace Ruler
 		{
 			this.IsLocked = !this.IsLocked;
 			this._lockedMenuItem.Checked = this.IsLocked;
+            Invalidate();
 		}
 
 		private void DuplicateHandler(object sender, EventArgs e)
@@ -196,6 +200,11 @@ namespace Ruler
 			_offset = new Point(MousePosition.X - Location.X, MousePosition.Y - Location.Y);
 			_mouseDownPoint = MousePosition;
 			_mouseDownRect = ClientRectangle;
+
+            if (_LockIconRegion.IsVisible(e.Location))
+            {
+                LockHandler(this, e);
+            }
 
 			base.OnMouseDown(e);
 		}
@@ -461,35 +470,47 @@ namespace Ruler
 			// Border
 			g.DrawRectangle(new Pen(_TickColor), 0, 0, formWidth - 1, formHeight - 1);
 
-			
-
-            // Ticks
-            for (int i = 0; i < formWidth; i++)
-			{
-				if (i % 2 == 0)
-				{
-					int tickHeight;
-					if (i % 100 == 0)
-					{
-						tickHeight = 15;
-						DrawTickLabel(g, i.ToString(), i, formHeight, tickHeight);
-					}
-					else if (i % 10 == 0)
-					{
-						tickHeight = 10;
-					}
-					else
-					{
-						tickHeight = 5;
-					}
-
-					DrawTick(g, i, formHeight, tickHeight);
-				}
-			}
+            DrawTicks(g, formWidth, formHeight);
 
             DrawCursor(g, formWidth, formHeight);
 
+            // Rotate everything after this if we are vertical
+            if (IsVertical)
+                g.RotateTransform(-90);
 
+            DrawDynamicLabels(g, formWidth, formHeight);
+
+            DrawIcons(g, formWidth, formHeight);
+        }
+
+        private void DrawTicks(Graphics g, int formWidth, int formHeight)
+        {
+            for (int i = 0; i < formWidth; i++)
+            {
+                if (i % 2 == 0)
+                {
+                    int tickHeight;
+                    if (i % 100 == 0)
+                    {
+                        tickHeight = 15;
+                        DrawTickLabel(g, i.ToString(), i, formHeight, tickHeight);
+                    }
+                    else if (i % 10 == 0)
+                    {
+                        tickHeight = 10;
+                    }
+                    else
+                    {
+                        tickHeight = 5;
+                    }
+
+                    DrawTick(g, i, formHeight, tickHeight);
+                }
+            }
+        }
+
+        private void DrawDynamicLabels(Graphics g, int formWidth, int formHeight)
+        {
             Point pos = PointToClient(MousePosition);
             int taX = 10;
             int taY = formHeight - (Font.Height * 3);
@@ -501,11 +522,10 @@ namespace Ruler
             // Rotate the labels if we are Vertical
             if (IsVertical)
             {
-                g.RotateTransform(-90);
                 taX = (formHeight * -1) + 10;
-                taY = formWidth - (Font.Height * 3);
+                taY = formWidth - (Font.Height * 5);
                 tbX = (formHeight * -1) + 10;
-                tbY = formWidth - (Font.Height * 2);
+                tbY = formWidth - (Font.Height * 4);
                 dimensionLabelText = formHeight + "W x " + formWidth + "H px";
                 cursorLabelText = pos.Y + "px";
             }
@@ -513,8 +533,22 @@ namespace Ruler
             // Dimensions labels
             g.DrawString(dimensionLabelText, Font, new SolidBrush(_TickColor), taX, taY);
             g.DrawString(cursorLabelText, Font, new SolidBrush(_CursorColor), tbX, tbY);
-
         }
+
+        private void DrawIcons(Graphics g, int formWidth, int formHeight)
+        {
+            Icon lockIcon = IsLocked ? GetIcon("LockIcon") : GetIcon("UnlockIcon");
+            Point lockIconPoint = new Point((formWidth - lockIcon.Width) - 10, formHeight - (lockIcon.Height * 2));
+
+            if (IsVertical)
+                lockIconPoint = new Point((formHeight * -1) + 10, formWidth - (lockIcon.Height * 2));
+
+            // Keep a reference of the region where the icon is to detect a click on it
+            _LockIconRegion = new Region(new Rectangle(lockIconPoint, lockIcon.Size));
+
+            g.DrawIcon(lockIcon, lockIconPoint.X, lockIconPoint.Y);
+        }
+
 
         private void DrawCursor(Graphics g, int formWidth, int formHeight)
         {
@@ -619,5 +653,17 @@ namespace Ruler
 			this.Width = Height;
 			this.Height = width;
 		}
-	}
+
+        private void InitializeComponent()
+        {
+            this.SuspendLayout();
+            // 
+            // MainForm
+            // 
+            this.ClientSize = new Size(284, 262);
+            this.Name = "MainForm";
+            this.ResumeLayout(false);
+
+        }
+    }
 }
