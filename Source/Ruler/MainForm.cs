@@ -31,7 +31,9 @@ namespace Ruler
         private static Color _TickColor = ColorTranslator.FromHtml("#3E2815");
         private static Color _CursorColor = Color.FromArgb(200, _TickColor);
         private static Region _lockIconRegion;
+        private static Region _rotateIconRegion;
         private static Rectangle _lockIconRegionR;
+        private static Rectangle _rotateIconRegionR;
 
 
         public MainForm()
@@ -211,6 +213,11 @@ namespace Ruler
             if (_lockIconRegion.IsVisible(e.Location) )
             {
                 LockHandler(this, e);
+            }
+
+            if (_rotateIconRegion.IsVisible(e.Location))
+            {
+                ChangeOrientation();
             }
 
             base.OnMouseUp(e);
@@ -537,21 +544,38 @@ namespace Ruler
 
         private void DrawIcons(Graphics g, int formWidth, int formHeight)
         {
+
+            // Lock Icon
             Icon lockIcon = IsLocked ? GetIcon("LockIcon") : GetIcon("UnlockIcon");
             Point lockIconPoint = new Point((formWidth - lockIcon.Width) - 10, formHeight - (lockIcon.Height * 2));
             _lockIconRegionR = new Rectangle(lockIconPoint, lockIcon.Size);
 
             if (IsVertical)
             {
-                lockIconPoint = new Point((formHeight * -1) + 10, formWidth - (lockIcon.Height * 2));
-                _lockIconRegionR = new Rectangle(new Point(10, lockIconPoint.Y) , lockIcon.Size);
+                lockIconPoint = new Point((formHeight * -1) + (20 + lockIcon.Width), formWidth - (lockIcon.Height * 2));
+                _lockIconRegionR = new Rectangle(new Point((20 + lockIcon.Width), lockIconPoint.Y) , lockIcon.Size);
                 
             }
             
             // Keep a reference of the region where the icon is to detect a click on it
             _lockIconRegion = new Region(_lockIconRegionR);
-            
+
+            // Rotate Icon
+            Icon RotateIcon = GetIcon("RotateIcon");
+            Point RotateIconPoint = new Point(lockIconPoint.X - (10 + RotateIcon.Width), lockIconPoint.Y);
+            _rotateIconRegionR = new Rectangle(RotateIconPoint, RotateIcon.Size);
+
+            if (IsVertical)
+            {
+                _rotateIconRegionR = new Rectangle(new Point(10 , lockIconPoint.Y), lockIcon.Size);
+
+            }
+
+            _rotateIconRegion = new Region(_rotateIconRegionR);
+
+
             g.DrawIcon(lockIcon, lockIconPoint.X, lockIconPoint.Y);
+            g.DrawIcon(RotateIcon, RotateIconPoint.X, RotateIconPoint.Y);
         }
 
 

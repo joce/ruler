@@ -129,4 +129,30 @@
     </value>
     <comment>The Lock Icon</comment>
   </data>
+  <data name="RotateIcon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+      AAABAAEAEBAAAAAAIABoBAAAFgAAACgAAAAQAAAAIAAAAAEAIAAAAAAAQAQAAAAAAAAAAAAAAAAA
+      AAAAAAD///8B////Af///wH///8B////Af///wH///8B////Af///wH///8B////Af///wH///8B
+      ////Af///wH///8B////Af///wH///8B////Af///wH///8B////Af///wH///8B////Af///wH/
+      //8B////Af///wH///8B////Af///wH///8B////Af///wH///8B////AQAAABEAAAARAAAAEQAA
+      ABH///8B////Af///wH///8B////Af///wH///8B////Af///wH///8BAAAAEQAAAKEAAAD/AAAA
+      QQAAAEEAAAD/AAAAsQAAABH///8B////Af///wH///8B////Af///wH///8BAAAAEQAAANEAAADf
+      AAAAXwAAABEAAAARAAAATwAAAI////8BAAAAEf///wH///8B////Af///wH///8B////AQAAAKEA
+      AADfAAAAEf///wH///8B////Af///wH///8BAAAAkQAAAKH///8B////Af///wH///8B////AQAA
+      ABEAAAD/AAAAYf///wH///8B////Af///wH///8B////AQAAAFEAAAD/AAAAEf///wH///8B////
+      Af///wEAAABBAAAA/wAAABH///8B////Af///wH///8B////Af///wEAAAARAAAAPwAAABH///8B
+      ////Af///wH///8BAAAAQQAAAP8AAAAR////Af///wH///8B////Af///wH///8BAAAAEQAAAEEA
+      AAAR////Af///wH///8B////AQAAABEAAAD/AAAAYf///wH///8BAAAAUf///wH///8B////AQAA
+      AFEAAAD/AAAAEf///wH///8B////Af///wH///8BAAAAoQAAAOEAAAAR////AQAAAMEAAACh////
+      Af///wEAAACRAAAAof///wH///8B////Af///wH///8B////AQAAABEAAADPAAAA4QAAAGEAAADR
+      AAAA/wAAAKH///8B////AQAAABH///8B////Af///wH///8B////Af///wH///8BAAAAEQAAAJ8A
+      AAD/AAAA/wAAAP8AAADvAAAAIf///wH///8B////Af///wH///8B////Af///wH///8B////Af//
+      /wH///8BAAAAEQAAAM8AAADvAAAAMf///wH///8B////Af///wH///8B////Af///wH///8B////
+      Af///wH///8B////Af///wEAAACxAAAAMf///wH///8B////Af///wH///8B////Af///wH///8B
+      ////Af///wH///8B////Af///wH///8BAAAAEf///wH///8B////Af///wH///8B////Af///wH/
+      //8BAAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA
+      //8AAP//AAD//w==
+    </value>
+    <comment>The Lock Icon</comment>
+  </data>
 </root>
