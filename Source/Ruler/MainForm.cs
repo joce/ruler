@@ -30,7 +30,8 @@ namespace Ruler
 		private MenuItem _lockedMenuItem;
         private static Color _TickColor = ColorTranslator.FromHtml("#3E2815");
         private static Color _CursorColor = Color.FromArgb(200, _TickColor);
-        private static Region _LockIconRegion;
+        private static Region _lockIconRegion;
+        private static Rectangle _lockIconRegionR;
 
 
         public MainForm()
@@ -201,18 +202,18 @@ namespace Ruler
 			_mouseDownPoint = MousePosition;
 			_mouseDownRect = ClientRectangle;
 
-            if (_LockIconRegion.IsVisible(e.Location))
-            {
-                LockHandler(this, e);
-            }
-
 			base.OnMouseDown(e);
 		}
 
 		protected override void OnMouseUp(MouseEventArgs e)
 		{
 			_resizeRegion = ResizeRegion.None;
-			base.OnMouseUp(e);
+            if (_lockIconRegion.IsVisible(e.Location) )
+            {
+                LockHandler(this, e);
+            }
+
+            base.OnMouseUp(e);
 		}
 
 		protected override void OnMouseMove(MouseEventArgs e)
@@ -229,7 +230,7 @@ namespace Ruler
 
 			bool inResizableArea = ClientRectangle.Contains(clientCursorPos) && !resizeInnerRect.Contains(clientCursorPos);
 
-			if (inResizableArea)
+			if (inResizableArea && !IsLocked)
 			{
 				ResizeRegion resizeRegion = GetResizeRegion(clientCursorPos);
 				SetResizeCursor(resizeRegion);
@@ -455,9 +456,7 @@ namespace Ruler
 				height = Width;
 				width = Height;
 			}
-
             
-
 			DrawRuler(graphics, width, height);
 
 			base.OnPaint(e);
@@ -481,6 +480,7 @@ namespace Ruler
             DrawDynamicLabels(g, formWidth, formHeight);
 
             DrawIcons(g, formWidth, formHeight);
+
         }
 
         private void DrawTicks(Graphics g, int formWidth, int formHeight)
@@ -539,13 +539,18 @@ namespace Ruler
         {
             Icon lockIcon = IsLocked ? GetIcon("LockIcon") : GetIcon("UnlockIcon");
             Point lockIconPoint = new Point((formWidth - lockIcon.Width) - 10, formHeight - (lockIcon.Height * 2));
+            _lockIconRegionR = new Rectangle(lockIconPoint, lockIcon.Size);
 
             if (IsVertical)
+            {
                 lockIconPoint = new Point((formHeight * -1) + 10, formWidth - (lockIcon.Height * 2));
-
+                _lockIconRegionR = new Rectangle(new Point(10, lockIconPoint.Y) , lockIcon.Size);
+                
+            }
+            
             // Keep a reference of the region where the icon is to detect a click on it
-            _LockIconRegion = new Region(new Rectangle(lockIconPoint, lockIcon.Size));
-
+            _lockIconRegion = new Region(_lockIconRegionR);
+            
             g.DrawIcon(lockIcon, lockIconPoint.X, lockIconPoint.Y);
         }
 
