@@ -2,13 +2,17 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
+#pragma warning disable
+[assembly: AssemblyFileVersion("1.4.0.0 - R2")]
+#pragma warning restore
+
 //
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 //
-[assembly: AssemblyTitle("Ruler")]
-[assembly: AssemblyDescription("It's a ruler")]
+[assembly: AssemblyTitle("Ruler-mod")]
+[assembly: AssemblyDescription("It's still a ruler!")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Jeff Key")]
 [assembly: AssemblyProduct("Ruler")]

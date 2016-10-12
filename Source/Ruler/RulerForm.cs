@@ -920,8 +920,10 @@ namespace Ruler
 					break;
 
 				case "About...":
-					string message = string.Format("Ruler v{0} by Jeff Key\nwww.sliver.com", Application.ProductVersion);
-					MessageBox.Show(message, "About Ruler", MessageBoxButtons.OK, MessageBoxIcon.Information);
+					using (AboutForm form = new Ruler.AboutForm())
+					{
+						form.ShowDialog(this);
+					}
 					break;
 
 				default:

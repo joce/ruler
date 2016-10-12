@@ -113,6 +113,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AboutForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AboutForm.Designer.cs">
+      <DependentUpon>AboutForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Dimension.cs" />
     <Compile Include="IRulerInfo.cs" />
     <Compile Include="Program.cs" />
@@ -144,6 +150,9 @@
     </Compile>
     <None Include="Resources\FlipIcon.ico" />
     <None Include="Resources\FlipVertIcon.ico" />
+    <EmbeddedResource Include="AboutForm.resx">
+      <DependentUpon>AboutForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="RulerForm.resx">
       <DependentUpon>RulerForm.cs</DependentUpon>
       <SubType>Designer</SubType>
