@@ -24,9 +24,6 @@ namespace Ruler
 		private Point _mouseDownPoint;
 		private ResizeRegion _resizeRegion = ResizeRegion.None;
 		private ContextMenu _menu = new ContextMenu();
-		private MenuItem _verticalMenuItem;
-		private MenuItem _toolTipMenuItem;
-		private MenuItem _lockedMenuItem;
 
 		public MainForm()
 		{
@@ -42,8 +39,8 @@ namespace Ruler
 
 		public bool IsVertical
 		{
-			get { return this._verticalMenuItem.Checked; }
-			set { this._verticalMenuItem.Checked = value; }
+			get;
+			set;
 		}
 
 		public bool IsLocked
@@ -54,19 +51,8 @@ namespace Ruler
 
 		public bool ShowToolTip
 		{
-			get
-			{
-				return this._toolTipMenuItem.Checked;
-			}
-			set
-			{
-				this._toolTipMenuItem.Checked = value;
-
-				if (value)
-				{
-					this.SetToolTip();
-				}
-			}
+			get;
+			set;
 		}
 
 		private void Init(RulerInfo rulerInfo)
@@ -104,10 +90,10 @@ namespace Ruler
 		private void SetUpMenu()
 		{
 			this.AddMenuItem("Stay On Top");
-			this._verticalMenuItem = this.AddMenuItem("Vertical");
-			this._toolTipMenuItem = this.AddMenuItem("Tool Tip");
+			this.AddMenuItem("Vertical", Shortcut.None, this.VerticalHandler);
+			this.AddMenuItem("Tool Tip", Shortcut.None, this.ToolTipHandler);
 			MenuItem opacityMenuItem = this.AddMenuItem("Opacity");
-			this._lockedMenuItem = this.AddMenuItem("Lock resizing", Shortcut.None, this.LockHandler);
+			this.AddMenuItem("Lock resizing", Shortcut.None, this.LockHandler);
 			this.AddMenuItem("Set size...", Shortcut.None, this.SetWidthHeightHandler);
 			this.AddMenuItem("Duplicate", Shortcut.None, this.DuplicateHandler);
 			this.AddMenuItem("-");
@@ -122,6 +108,19 @@ namespace Ruler
 				subMenu.Click += new EventHandler(OpacityMenuHandler);
 				opacityMenuItem.MenuItems.Add(subMenu);
 			}
+		}
+
+		private void ToolTipHandler(object sender, EventArgs e)
+		{
+			ShowToolTip = !ShowToolTip;
+			((MenuItem)sender).Checked = this.ShowToolTip;
+			this.SetToolTip();
+		}
+
+		private void VerticalHandler(object sender, EventArgs e)
+		{
+			ChangeOrientation();
+			((MenuItem)sender).Checked = this.IsVertical;
 		}
 
 		private void SetWidthHeightHandler(object sender, EventArgs e)
@@ -145,7 +144,7 @@ namespace Ruler
 		private void LockHandler(object sender, EventArgs e)
 		{
 			this.IsLocked = !this.IsLocked;
-			this._lockedMenuItem.Checked = this.IsLocked;
+			((MenuItem)sender).Checked = this.IsLocked;
 		}
 
 		private void DuplicateHandler(object sender, EventArgs e)
@@ -231,17 +230,16 @@ namespace Ruler
 
 		protected override void OnResize(EventArgs e)
 		{
-			if (this.ShowToolTip)
-			{
-				this.SetToolTip();
-			}
-
+			this.SetToolTip();
 			base.OnResize(e);
 		}
 
 		private void SetToolTip()
 		{
-			_toolTip.SetToolTip(this, string.Format("Width: {0} pixels\nHeight: {1} pixels", Width, Height));
+			if (ShowToolTip)
+				_toolTip.SetToolTip(this, string.Format("Width: {0} pixels\nHeight: {1} pixels", Width, Height));
+			else
+				_toolTip.RemoveAll();
 		}
 
 		protected override void OnKeyDown(KeyEventArgs e)
@@ -531,14 +529,6 @@ namespace Ruler
 			{
 				case "Exit":
 					Close();
-					break;
-
-				case "Tool Tip":
-					ShowToolTip = !ShowToolTip;
-					break;
-
-				case "Vertical":
-					ChangeOrientation();
 					break;
 
 				case "Stay On Top":
