@@ -12,7 +12,7 @@ namespace Ruler
 
 		private enum ResizeRegion
 		{
-			None, N, NE, E, SE, S, SW, W, NW
+			None, N, E, S, W
 		}
 
 		#endregion ResizeRegion enum
@@ -354,16 +354,24 @@ namespace Ruler
 						Width = _mouseDownRect.Width + diff;
 						break;
 					}
+				case ResizeRegion.W:
+					{
+						Left = MousePosition.X;
+						int diff = MousePosition.X - _mouseDownPoint.X;
+						Width = _mouseDownRect.Width - diff;
+						break;
+					}
 				case ResizeRegion.S:
 					{
 						int diff = MousePosition.Y - _mouseDownPoint.Y;
 						Height = _mouseDownRect.Height + diff;
 						break;
 					}
-				case ResizeRegion.SE:
+				case ResizeRegion.N:
 					{
-						Width = _mouseDownRect.Width + MousePosition.X - _mouseDownPoint.X;
-						Height = _mouseDownRect.Height + MousePosition.Y - _mouseDownPoint.Y;
+						Top = MousePosition.Y;
+						int diff = MousePosition.Y - _mouseDownPoint.Y;
+						Height = _mouseDownRect.Height - diff;
 						break;
 					}
 			}
@@ -371,26 +379,25 @@ namespace Ruler
 
 		private void SetResizeCursor(ResizeRegion region)
 		{
-			switch (region)
+			if (IsLocked)
 			{
-				case ResizeRegion.N:
-				case ResizeRegion.S:
+				return;
+			}
+
+			if (IsVertical)
+			{
+				if (region == ResizeRegion.N || region == ResizeRegion.S)
+				{
 					Cursor = Cursors.SizeNS;
-					break;
 
-				case ResizeRegion.E:
-				case ResizeRegion.W:
+				}
+			}
+			else
+			{
+				if (region == ResizeRegion.E || region == ResizeRegion.W)
+				{
 					Cursor = Cursors.SizeWE;
-					break;
-
-				case ResizeRegion.NW:
-				case ResizeRegion.SE:
-					Cursor = Cursors.SizeNWSE;
-					break;
-
-				default:
-					Cursor = Cursors.SizeNESW;
-					break;
+				}
 			}
 		}
 
@@ -398,21 +405,15 @@ namespace Ruler
 		{
 			if (clientCursorPos.Y <= _resizeBorderWidth)
 			{
-				if (clientCursorPos.X <= _resizeBorderWidth) return ResizeRegion.NW;
-				else if (clientCursorPos.X >= Width - _resizeBorderWidth) return ResizeRegion.NE;
-				else return ResizeRegion.N;
+				return ResizeRegion.N;
 			}
-			else if (clientCursorPos.Y >= Height - _resizeBorderWidth)
+
+			if (clientCursorPos.Y >= Height - _resizeBorderWidth)
 			{
-				if (clientCursorPos.X <= _resizeBorderWidth) return ResizeRegion.SW;
-				else if (clientCursorPos.X >= Width - _resizeBorderWidth) return ResizeRegion.SE;
-				else return ResizeRegion.S;
+				return ResizeRegion.S;
 			}
-			else
-			{
-				if (clientCursorPos.X <= _resizeBorderWidth) return ResizeRegion.W;
-				else return ResizeRegion.E;
-			}
+
+			return clientCursorPos.X <= _resizeBorderWidth ? ResizeRegion.W : ResizeRegion.E;
 		}
 
 		protected override void OnPaint(PaintEventArgs e)
@@ -444,27 +445,20 @@ namespace Ruler
 			g.DrawString(formWidth + " pixels", Font, Brushes.Black, 10, (formHeight / 2) - (Font.Height / 2));
 
 			// Ticks
-			for (int i = 0; i < formWidth; i++)
+			for (int i = 0; i < formWidth; i+=2)
 			{
-				if (i % 2 == 0)
+				int tickHeight = 5;
+				if (i % 100 == 0)
 				{
-					int tickHeight;
-					if (i % 100 == 0)
-					{
-						tickHeight = 15;
-						DrawTickLabel(g, i.ToString(), i, formHeight, tickHeight);
-					}
-					else if (i % 10 == 0)
-					{
-						tickHeight = 10;
-					}
-					else
-					{
-						tickHeight = 5;
-					}
-
-					DrawTick(g, i, formHeight, tickHeight);
+					tickHeight = 15;
+					DrawTickLabel(g, i.ToString(), i, formHeight, tickHeight);
 				}
+				else if (i % 10 == 0)
+				{
+					tickHeight = 10;
+				}
+
+				DrawTick(g, i, formHeight, tickHeight);
 			}
 		}
 
