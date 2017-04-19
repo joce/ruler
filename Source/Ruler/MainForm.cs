@@ -339,7 +339,9 @@ namespace Ruler
 
 		private void HandleResize()
 		{
-			if (this.IsLocked)
+			if (this.IsLocked ||
+				(IsVertical && (_resizeRegion == ResizeRegion.E || _resizeRegion == ResizeRegion.W))||
+				(!IsVertical && (_resizeRegion == ResizeRegion.N || _resizeRegion == ResizeRegion.S)))
 			{
 				return;
 			}
