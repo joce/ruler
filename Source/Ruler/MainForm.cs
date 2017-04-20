@@ -57,6 +57,9 @@ namespace Ruler
 
 		private void Init(RulerInfo rulerInfo)
 		{
+			InitializeComponent();
+			rulerInfo.CopyInto(this);
+
 			this.SetStyle(ControlStyles.ResizeRedraw, true);
 			this.UpdateStyles();
 
@@ -67,8 +70,6 @@ namespace Ruler
 
 			this.Text = "Ruler";
 			this.BackColor = Color.White;
-
-			rulerInfo.CopyInto(this);
 
 			this.FormBorderStyle = FormBorderStyle.None;
 
@@ -125,7 +126,7 @@ namespace Ruler
 
 		private void SetWidthHeightHandler(object sender, EventArgs e)
 		{
-			SetSizeForm form = new SetSizeForm(this.Width, this.Height);
+			SetSizeForm form = new SetSizeForm(IsVertical ? this.Height : this.Width);
 
 			if (this.TopMost)
 			{
@@ -134,10 +135,15 @@ namespace Ruler
 
 			if (form.ShowDialog() == System.Windows.Forms.DialogResult.OK)
 			{
-				Size size = form.GetNewSize();
-
-				this.Width = size.Width;
-				this.Height = size.Height;
+				int length = form.GetNewSize();
+				if (IsVertical)
+				{
+					this.Height = length;
+				}
+				else
+				{
+					this.Width = length;
+				}
 			}
 		}
 
@@ -237,7 +243,7 @@ namespace Ruler
 		private void SetToolTip()
 		{
 			if (ShowToolTip)
-				_toolTip.SetToolTip(this, string.Format("Width: {0} pixels\nHeight: {1} pixels", Width, Height));
+				_toolTip.SetToolTip(this, string.Format("Length: {0} pixels", IsVertical ? Height : Width));
 			else
 				_toolTip.RemoveAll();
 		}
@@ -555,6 +561,21 @@ namespace Ruler
 			int width = Width;
 			this.Width = Height;
 			this.Height = width;
+		}
+
+		private void InitializeComponent()
+		{
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
+			this.SuspendLayout();
+			//
+			// MainForm
+			//
+			this.ClientSize = new System.Drawing.Size(1, 1);
+			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+			this.MinimumSize = new System.Drawing.Size(1, 1);
+			this.Name = "MainForm";
+			this.ResumeLayout(false);
 		}
 	}
 }

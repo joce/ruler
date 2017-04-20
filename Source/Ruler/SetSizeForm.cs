@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -10,18 +10,15 @@ namespace Ruler
 {
 	public partial class SetSizeForm : Form
 	{
-		private int originalWidth;
-		private int originalHeight;
+		private int originalLength;
 
-		public SetSizeForm(int initWidth, int initHeight)
+		public SetSizeForm(int initLength)
 		{
 			this.InitializeComponent();
 
-			this.originalWidth = initWidth;
-			this.originalHeight = initHeight;
+			this.originalLength = initLength;
 
-			this.txtWidth.Text = initWidth.ToString();
-			this.txtHeight.Text = initHeight.ToString();
+			this.txtWidth.Text = initLength.ToString();
 		}
 
 		private void BtnCancelClick(object sender, EventArgs e)
@@ -35,17 +32,13 @@ namespace Ruler
 			this.DialogResult = System.Windows.Forms.DialogResult.OK;
 		}
 
-		public Size GetNewSize()
+		public int GetNewSize()
 		{
-			int width;
-			int height;
+			int length;
 
-			Size size = new Size();
+			length = int.TryParse(this.txtWidth.Text, out length) ? length : originalLength;
 
-			size.Width = int.TryParse(this.txtWidth.Text, out width) ? width : originalWidth;
-			size.Height = int.TryParse(this.txtHeight.Text, out height) ? height : originalHeight;
-
-			return size;
+			return length;
 		}
 	}
 }

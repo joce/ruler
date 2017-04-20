@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -59,22 +59,21 @@ namespace Ruler
 
 		public string ConvertToParameters()
 		{
-			return string.Format("{0} {1} {2} {3} {4} {5} {6}", this.Width, this.Height, this.IsVertical, this.Opacity, this.ShowToolTip, this.IsLocked, this.TopMost);
+			return string.Format("{0} {1} {2} {3} {4} {5}", this.Height, this.IsVertical, this.Opacity, this.ShowToolTip, this.IsLocked, this.TopMost);
 		}
 
 		public static RulerInfo CovertToRulerInfo(string[] args)
 		{
-			string width = args[0];
-			string height = args[1];
-			string isVertical = args[2];
-			string opacity = args[3];
-			string showToolTip = args[4];
-			string isLocked = args[5];
-			string topMost = args[6];
+			string height = args[0];
+			string isVertical = args[1];
+			string opacity = args[2];
+			string showToolTip = args[3];
+			string isLocked = args[4];
+			string topMost = args[5];
 
 			RulerInfo rulerInfo = new RulerInfo();
 
-			rulerInfo.Width = int.Parse(width);
+			rulerInfo.Width = 75;
 			rulerInfo.Height = int.Parse(height);
 			rulerInfo.IsVertical = bool.Parse(isVertical);
 			rulerInfo.Opacity = double.Parse(opacity);
