@@ -188,6 +188,12 @@ namespace Ruler
 			return mi;
 		}
 
+		protected override void OnDoubleClick(EventArgs e)
+		{
+			ChangeOrientation();
+			base.OnDoubleClick(e);
+		}
+
 		protected override void OnMouseDown(MouseEventArgs e)
 		{
 			_offset = new Point(MousePosition.X - Location.X, MousePosition.Y - Location.Y);
