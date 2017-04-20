@@ -59,7 +59,7 @@ namespace Ruler
 
 		public string ConvertToParameters()
 		{
-			return string.Format("{0} {1} {2} {3} {4} {5}", this.Height, this.IsVertical, this.Opacity, this.ShowToolTip, this.IsLocked, this.TopMost);
+			return string.Format("{0} {1} {2} {3} {4} {5}", this.IsVertical ? this.Height : this.Width, this.IsVertical, this.Opacity, this.ShowToolTip, this.IsLocked, this.TopMost);
 		}
 
 		public static RulerInfo CovertToRulerInfo(string[] args)
@@ -73,13 +73,23 @@ namespace Ruler
 
 			RulerInfo rulerInfo = new RulerInfo();
 
-			rulerInfo.Width = 75;
-			rulerInfo.Height = int.Parse(height);
 			rulerInfo.IsVertical = bool.Parse(isVertical);
 			rulerInfo.Opacity = double.Parse(opacity);
 			rulerInfo.ShowToolTip = bool.Parse(showToolTip);
 			rulerInfo.IsLocked = bool.Parse(isLocked);
 			rulerInfo.TopMost = bool.Parse(topMost);
+
+			int length = int.Parse(height);
+			if (rulerInfo.IsVertical)
+			{
+				rulerInfo.Height = length;
+				rulerInfo.Width = 75;
+			}
+			else
+			{
+				rulerInfo.Height = 75;
+				rulerInfo.Width = length;
+			}
 
 			return rulerInfo;
 		}
@@ -90,7 +100,7 @@ namespace Ruler
 
 			rulerInfo.Width = 400;
 			rulerInfo.Height = 75;
-			rulerInfo.Opacity = 0.65;
+			rulerInfo.Opacity = 0.6;
 			rulerInfo.ShowToolTip = false;
 			rulerInfo.IsLocked = false;
 			rulerInfo.IsVertical = false;
