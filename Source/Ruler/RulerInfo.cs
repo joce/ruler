@@ -100,7 +100,7 @@ namespace Ruler
 
 			rulerInfo.Width = 500;
 			rulerInfo.Height = 126;
-			rulerInfo.Opacity = 0.65;
+			rulerInfo.Opacity = 0.6;
 			rulerInfo.ShowToolTip = false;
 			rulerInfo.IsLocked = false;
 			rulerInfo.IsVertical = false;

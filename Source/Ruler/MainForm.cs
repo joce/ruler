@@ -113,6 +113,7 @@ namespace Ruler
 			for (int i = 10; i <= 100; i += 10)
 			{
 				MenuItem subMenu = new MenuItem(i + "%");
+				subMenu.Checked = (i == Opacity * 100);
 				subMenu.Click += new EventHandler(OpacityMenuHandler);
 				opacityMenuItem.MenuItems.Add(subMenu);
 			}
@@ -631,15 +632,26 @@ namespace Ruler
 			Application.Run(mainForm);
 		}
 
+		private void UncheckMenuItems(Menu parent)
+		{
+			for (int i = 0; i < parent.MenuItems.Count; i++)
+			{
+				parent.MenuItems[i].Checked = false;
+			}
+		}
+
 		private void OpacityMenuHandler(object sender, EventArgs e)
 		{
 			MenuItem mi = (MenuItem)sender;
+			UncheckMenuItems(mi.Parent);
 			Opacity = double.Parse(mi.Text.Replace("%", "")) / 100;
+			mi.Checked = true;
 		}
 
 		private void ColorMenuHandler(object sender, EventArgs e)
 		{
 			MenuItem mi = (MenuItem)sender;
+			UncheckMenuItems(mi.Parent);
 			switch (mi.Text)
 			{
 				case "White":
