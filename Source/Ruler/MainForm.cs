@@ -66,6 +66,8 @@ namespace Ruler
 		private void Init(RulerInfo rulerInfo)
 		{
 			InitializeComponent();
+			rulerInfo.CopyInto(this);
+
 			this.SetStyle(ControlStyles.ResizeRedraw, true);
 			this.UpdateStyles();
 
@@ -75,8 +77,6 @@ namespace Ruler
 
 			this.Text = "Ruler";
 			this.BackColor = Color.LightYellow;
-
-			rulerInfo.CopyInto(this);
 
 			this.FormBorderStyle = FormBorderStyle.None;
 
@@ -97,12 +97,12 @@ namespace Ruler
 
 		private void SetUpMenu()
 		{
-			this.AddMenuItem("Stay On Top");
-			this.AddMenuItem("Vertical", Shortcut.None, this.VerticalHandler);
-			this.AddMenuItem("Tool Tip", Shortcut.None, this.ToolTipHandler);
+			this.AddMenuItem("Stay On Top", Shortcut.None, this.StayOnTopHandler, TopMost);
+			this.AddMenuItem("Vertical", Shortcut.None, this.VerticalHandler, IsVertical);
+			this.AddMenuItem("Tool Tip", Shortcut.None, this.ToolTipHandler, ShowToolTip);
 			MenuItem opacityMenuItem = this.AddMenuItem("Opacity");
 			MenuItem colorMenuItem = this.AddMenuItem("Color");
-			this.AddMenuItem("Lock resizing", Shortcut.None, this.LockHandler);
+			this.AddMenuItem("Lock resizing", Shortcut.None, this.LockHandler, IsLocked);
 			this.AddMenuItem("Set size...", Shortcut.None, this.SetWidthHeightHandler);
 			this.AddMenuItem("Duplicate", Shortcut.None, this.DuplicateHandler);
 			this.AddMenuItem("-");
@@ -170,6 +170,12 @@ namespace Ruler
 			Invalidate();
 		}
 
+		private void StayOnTopHandler(object sender, EventArgs e)
+		{
+			TopMost = !TopMost;
+			((MenuItem)sender).Checked = TopMost;
+		}
+
 		private void DuplicateHandler(object sender, EventArgs e)
 		{
 			string exe = System.Reflection.Assembly.GetExecutingAssembly().Location;
@@ -195,6 +201,13 @@ namespace Ruler
 			mi.Shortcut = shortcut;
 			_menu.MenuItems.Add(mi);
 
+			return mi;
+		}
+
+		private MenuItem AddMenuItem(string text, Shortcut shortcut, EventHandler handler, bool isChecked)
+		{
+			MenuItem mi = AddMenuItem(text, shortcut, handler);
+			mi.Checked = isChecked;
 			return mi;
 		}
 
@@ -646,11 +659,6 @@ namespace Ruler
 			{
 				case "Exit":
 					Close();
-					break;
-
-				case "Stay On Top":
-					mi.Checked = !mi.Checked;
-					TopMost = mi.Checked;
 					break;
 
 				case "About...":
