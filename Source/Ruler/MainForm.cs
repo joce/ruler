@@ -117,7 +117,7 @@ namespace Ruler
 			}
 
 			// Add colors to color menus
-			string[] BGColors = new string[] { "Yellow", "Blue", "Red", "Green" };
+			string[] BGColors = new string[] { "White", "Yellow", "Blue", "Red", "Green" };
 			for (int i = 0; i < BGColors.Length; i++)
 			{
 				MenuItem subMenu = new MenuItem(BGColors[i]);
@@ -641,6 +641,9 @@ namespace Ruler
 			MenuItem mi = (MenuItem)sender;
 			switch (mi.Text)
 			{
+				case "White":
+					BackColor = Color.White;
+					break;
 				case "Yellow":
 					BackColor = Color.LightYellow;
 					break;

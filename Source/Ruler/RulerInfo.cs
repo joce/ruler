@@ -105,7 +105,7 @@ namespace Ruler
 			rulerInfo.IsLocked = false;
 			rulerInfo.IsVertical = false;
 			rulerInfo.TopMost = false;
-			rulerInfo.BackColor = Color.LightYellow;
+			rulerInfo.BackColor = Color.White;
 
 			return rulerInfo;
 		}
