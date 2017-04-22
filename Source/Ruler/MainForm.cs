@@ -25,6 +25,7 @@ namespace Ruler
 		private Point _mouseDownPoint;
 		private ResizeRegion _resizeRegion = ResizeRegion.None;
 		private ContextMenu _menu = new ContextMenu();
+		private MenuItem _lockMenuItem;
 		private static Color _TickColor = ColorTranslator.FromHtml("#3E2815");
 		private static Color _CursorColor = Color.FromArgb(200, _TickColor);
 		private static Region _lockIconRegion;
@@ -101,7 +102,7 @@ namespace Ruler
 			this.AddMenuItem("Tool Tip", Shortcut.None, this.ToolTipHandler, ShowToolTip);
 			MenuItem opacityMenuItem = this.AddMenuItem("Opacity");
 			MenuItem colorMenuItem = this.AddMenuItem("Color");
-			this.AddMenuItem("Lock resizing", Shortcut.None, this.LockHandler, IsLocked);
+			_lockMenuItem = this.AddMenuItem("Lock resizing", Shortcut.None, this.LockHandler, IsLocked);
 			this.AddMenuItem("Set size...", Shortcut.None, this.SetWidthHeightHandler);
 			this.AddMenuItem("Duplicate", Shortcut.None, this.DuplicateHandler);
 			this.AddMenuItem("-");
@@ -165,7 +166,7 @@ namespace Ruler
 		private void LockHandler(object sender, EventArgs e)
 		{
 			this.IsLocked = !this.IsLocked;
-			((MenuItem)sender).Checked = this.IsLocked;
+			_lockMenuItem.Checked = this.IsLocked;
 			Invalidate();
 		}
 
