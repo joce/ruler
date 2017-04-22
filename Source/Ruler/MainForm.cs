@@ -211,6 +211,12 @@ namespace Ruler
 			return mi;
 		}
 
+		protected override void OnDoubleClick(EventArgs e)
+		{
+			ChangeOrientation();
+			base.OnDoubleClick(e);
+		}
+
 		protected override void OnMouseDown(MouseEventArgs e)
 		{
 			_offset = new Point(MousePosition.X - Location.X, MousePosition.Y - Location.Y);
@@ -684,9 +690,9 @@ namespace Ruler
 		{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
 			this.SuspendLayout();
-			// 
+			//
 			// MainForm
-			// 
+			//
 			this.ClientSize = new System.Drawing.Size(1, 1);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
