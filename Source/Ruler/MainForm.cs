@@ -288,7 +288,8 @@ namespace Ruler
 				{
 					if (e.Shift)
 					{
-						Width += 1;
+						if (!IsVertical)
+							Width += 1;
 					}
 					else
 					{
@@ -306,7 +307,8 @@ namespace Ruler
 				{
 					if (e.Shift)
 					{
-						Width -= 1;
+						if (!IsVertical)
+							Width -= 1;
 					}
 					else
 					{
@@ -324,7 +326,8 @@ namespace Ruler
 				{
 					if (e.Shift)
 					{
-						Height -= 1;
+						if (IsVertical)
+							Height -= 1;
 					}
 					else
 					{
@@ -342,7 +345,8 @@ namespace Ruler
 				{
 					if (e.Shift)
 					{
-						Height += 1;
+						if (IsVertical)
+							Height += 1;
 					}
 					else
 					{
