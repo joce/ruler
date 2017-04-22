@@ -685,13 +685,15 @@ namespace Ruler
 
         private void InitializeComponent()
         {
-            this.SuspendLayout();
-            // 
-            // MainForm
-            // 
-            this.ClientSize = new Size(284, 262);
-            this.Name = "MainForm";
-            this.ResumeLayout(false);
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
+			this.SuspendLayout();
+			// 
+			// MainForm
+			// 
+			this.ClientSize = new System.Drawing.Size(284, 262);
+			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+			this.Name = "MainForm";
+			this.ResumeLayout(false);
 
         }
     }
