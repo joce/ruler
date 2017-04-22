@@ -1,5 +1,6 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Text;
 
 namespace Ruler
@@ -43,6 +44,12 @@ namespace Ruler
 		}
 
 		bool TopMost
+		{
+			get;
+			set;
+		}
+
+		Color BackColor
 		{
 			get;
 			set;

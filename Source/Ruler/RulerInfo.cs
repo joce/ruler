@@ -1,5 +1,6 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Text;
 
 namespace Ruler
@@ -57,9 +58,15 @@ namespace Ruler
 			set;
 		}
 
+		public Color BackColor
+		{
+			get;
+			set;
+		}
+
 		public string ConvertToParameters()
 		{
-			return string.Format("{0} {1} {2} {3} {4} {5} {6}", this.Width, this.Height, this.IsVertical, this.Opacity, this.ShowToolTip, this.IsLocked, this.TopMost);
+			return string.Format("{0} {1} {2} {3} {4} {5} {6} {7}", this.Width, this.Height, this.IsVertical, this.Opacity, this.ShowToolTip, this.IsLocked, this.TopMost, this.BackColor.Name);
 		}
 
 		public static RulerInfo CovertToRulerInfo(string[] args)
@@ -71,6 +78,7 @@ namespace Ruler
 			string showToolTip = args[4];
 			string isLocked = args[5];
 			string topMost = args[6];
+			string backColor = args[7];
 
 			RulerInfo rulerInfo = new RulerInfo();
 
@@ -81,6 +89,7 @@ namespace Ruler
 			rulerInfo.ShowToolTip = bool.Parse(showToolTip);
 			rulerInfo.IsLocked = bool.Parse(isLocked);
 			rulerInfo.TopMost = bool.Parse(topMost);
+			rulerInfo.BackColor = Color.FromName(backColor);
 
 			return rulerInfo;
 		}
@@ -96,6 +105,7 @@ namespace Ruler
 			rulerInfo.IsLocked = false;
 			rulerInfo.IsVertical = false;
 			rulerInfo.TopMost = false;
+			rulerInfo.BackColor = Color.LightYellow;
 
 			return rulerInfo;
 		}
@@ -113,6 +123,7 @@ namespace Ruler
 			targetInstance.ShowToolTip = ruler.ShowToolTip;
 			targetInstance.IsLocked = ruler.IsLocked;
 			targetInstance.TopMost = ruler.TopMost;
+			targetInstance.BackColor = ruler.BackColor;
 		}
 	}
 }

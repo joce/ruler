@@ -76,7 +76,6 @@ namespace Ruler
 			this.SetUpMenu();
 
 			this.Text = "Ruler";
-			this.BackColor = Color.LightYellow;
 
 			this.FormBorderStyle = FormBorderStyle.None;
 
