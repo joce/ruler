@@ -65,6 +65,7 @@ namespace Ruler
 
 		private void Init(RulerInfo rulerInfo)
 		{
+			InitializeComponent();
 			this.SetStyle(ControlStyles.ResizeRedraw, true);
 			this.UpdateStyles();
 
@@ -675,11 +676,13 @@ namespace Ruler
 		{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
 			this.SuspendLayout();
-			//
+			// 
 			// MainForm
-			//
-			this.ClientSize = new System.Drawing.Size(284, 262);
+			// 
+			this.ClientSize = new System.Drawing.Size(1, 1);
+			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+			this.MinimumSize = new System.Drawing.Size(1, 1);
 			this.Name = "MainForm";
 			this.ResumeLayout(false);
 
