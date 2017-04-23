@@ -9,14 +9,19 @@ namespace Ruler
 {
 	sealed public class MainForm : Form, IRulerInfo
 	{
-		#region ResizeRegion enum
-
+		[Flags]
 		private enum ResizeRegion
 		{
-			None, N, NE, E, SE, S, SW, W, NW
+			None,
+			N = 1,
+			E = 2,
+			S = 4,
+			W = 8,
+			NE = N | E,
+			NW = N | W,
+			SE = S | E,
+			SW = S | W
 		}
-
-		#endregion ResizeRegion enum
 
 		private ToolTip _toolTip = new ToolTip();
 		private ResourceManager _resources = new ResourceManager(typeof(MainForm));
@@ -412,26 +417,26 @@ namespace Ruler
 				return;
 			}
 
-			switch (_resizeRegion)
+			int xDiff = MousePosition.X - _mouseDownPoint.X;
+			if ((_resizeRegion & ResizeRegion.E) == ResizeRegion.E)
 			{
-				case ResizeRegion.E:
-					{
-						int diff = MousePosition.X - _mouseDownPoint.X;
-						Width = _mouseDownRect.Width + diff;
-						break;
-					}
-				case ResizeRegion.S:
-					{
-						int diff = MousePosition.Y - _mouseDownPoint.Y;
-						Height = _mouseDownRect.Height + diff;
-						break;
-					}
-				case ResizeRegion.SE:
-					{
-						Width = _mouseDownRect.Width + MousePosition.X - _mouseDownPoint.X;
-						Height = _mouseDownRect.Height + MousePosition.Y - _mouseDownPoint.Y;
-						break;
-					}
+				Width = _mouseDownRect.Width + xDiff;
+			}
+			else if ((_resizeRegion & ResizeRegion.W) == ResizeRegion.W)
+			{
+				Left = MousePosition.X;
+				Width = _mouseDownRect.Width - xDiff;
+			}
+
+			int yDiff = MousePosition.Y - _mouseDownPoint.Y;
+			if ((_resizeRegion & ResizeRegion.S) == ResizeRegion.S)
+			{
+				Height = _mouseDownRect.Height + yDiff;
+			}
+			else if ((_resizeRegion & ResizeRegion.N) == ResizeRegion.N)
+			{
+				Top = MousePosition.Y;
+				Height = _mouseDownRect.Height - yDiff;
 			}
 		}
 
