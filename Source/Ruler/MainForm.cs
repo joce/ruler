@@ -336,76 +336,41 @@ namespace Ruler
 
 		private void HandleMoveResizeKeystroke(KeyEventArgs e)
 		{
-			if (e.KeyCode == Keys.Right)
+			int sign = (e.KeyCode == Keys.Right || e.KeyCode == Keys.Down)? 1 : -1;
+			if (e.KeyCode == Keys.Right || e.KeyCode == Keys.Left)
 			{
 				if (e.Control)
 				{
 					if (e.Shift)
 					{
-						Width += 1;
+						Width += (1 * sign);
 					}
 					else
 					{
-						Left += 5;
+						Left += (5 * sign);
 					}
 				}
 				else
 				{
-					Left += 1;
+					Left += (1 * sign);
 				}
 			}
-			else if (e.KeyCode == Keys.Left)
+			else if (e.KeyCode == Keys.Up || e.KeyCode == Keys.Down)
 			{
 				if (e.Control)
 				{
 					if (e.Shift)
 					{
-						Width -= 1;
+						Height += (1 * sign);
 					}
 					else
 					{
-						Left -= 5;
+						Top += (5 * sign);
 					}
 				}
 				else
 				{
-					Left -= 1;
-				}
-			}
-			else if (e.KeyCode == Keys.Up)
-			{
-				if (e.Control)
-				{
-					if (e.Shift)
-					{
-						Height -= 1;
-					}
-					else
-					{
-						Top -= 5;
-					}
-				}
-				else
-				{
-					Top -= 1;
-				}
-			}
-			else if (e.KeyCode == Keys.Down)
-			{
-				if (e.Control)
-				{
-					if (e.Shift)
-					{
-						Height += 1;
-					}
-					else
-					{
-						Top += 5;
-					}
-				}
-				else
-				{
-					Top += 1;
+					Top += (1 * sign);
 				}
 			}
 		}
