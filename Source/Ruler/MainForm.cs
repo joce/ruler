@@ -441,23 +441,25 @@ namespace Ruler
 
 		private ResizeRegion GetResizeRegion(Point clientCursorPos)
 		{
+			ResizeRegion ret = ResizeRegion.None;
 			if (clientCursorPos.Y <= _resizeBorderWidth)
 			{
-				if (clientCursorPos.X <= _resizeBorderWidth) return ResizeRegion.NW;
-				else if (clientCursorPos.X >= Width - _resizeBorderWidth) return ResizeRegion.NE;
-				else return ResizeRegion.N;
+				ret |= ResizeRegion.N;
 			}
 			else if (clientCursorPos.Y >= Height - _resizeBorderWidth)
 			{
-				if (clientCursorPos.X <= _resizeBorderWidth) return ResizeRegion.SW;
-				else if (clientCursorPos.X >= Width - _resizeBorderWidth) return ResizeRegion.SE;
-				else return ResizeRegion.S;
+				ret |= ResizeRegion.S;
 			}
-			else
+
+			if (clientCursorPos.X <= _resizeBorderWidth)
 			{
-				if (clientCursorPos.X <= _resizeBorderWidth) return ResizeRegion.W;
-				else return ResizeRegion.E;
+				ret |= ResizeRegion.W;
 			}
+			else if (clientCursorPos.X >= Width - _resizeBorderWidth)
+			{
+				ret |= ResizeRegion.E;
+			}
+			return ret;
 		}
 
 		protected override void OnPaint(PaintEventArgs e)
