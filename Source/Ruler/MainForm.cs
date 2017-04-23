@@ -39,6 +39,9 @@ namespace Ruler
 		private static Rectangle _lockIconRegionR;
 		private static Rectangle _rotateIconRegionR;
 
+		private const int k_minWidth = 25;
+		private const int k_minHeight = 25;
+
 		private static readonly Dictionary<string, Color> s_ColorDict = new Dictionary<string, Color>()
 		{
 			{"White", Color.White},
@@ -680,10 +683,10 @@ namespace Ruler
 			//
 			// MainForm
 			//
-			this.ClientSize = new System.Drawing.Size(1, 1);
+			this.ClientSize = new System.Drawing.Size(k_minWidth, k_minHeight);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-			this.MinimumSize = new System.Drawing.Size(1, 1);
+			this.MinimumSize = new System.Drawing.Size(k_minWidth, k_minHeight);
 			this.Name = "MainForm";
 			this.ResumeLayout(false);
 
