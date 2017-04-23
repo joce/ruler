@@ -23,6 +23,11 @@ namespace Ruler
 			SW = S | W
 		}
 
+		private enum DragMode
+		{
+			None, Move, Resize
+		}
+
 		private ToolTip _toolTip = new ToolTip();
 		private ResourceManager _resources = new ResourceManager(typeof(MainForm));
 		private Point _offset;
@@ -32,6 +37,7 @@ namespace Ruler
 		private ResizeRegion _resizeRegion = ResizeRegion.None;
 		private ContextMenu _menu = new ContextMenu();
 		private MenuItem _lockMenuItem;
+		private DragMode _dragMode = DragMode.None;
 		private static Color _TickColor = ColorTranslator.FromHtml("#3E2815");
 		private static Color _CursorColor = Color.FromArgb(200, _TickColor);
 		private static Region _lockIconRegion;
@@ -244,6 +250,11 @@ namespace Ruler
 			_mouseDownPoint = MousePosition;
 			_mouseDownRect = ClientRectangle;
 
+			if (IsInResizableArea())
+				_dragMode = DragMode.Resize;
+			else
+				_dragMode = DragMode.Move;
+
 			base.OnMouseDown(e);
 		}
 
@@ -260,42 +271,35 @@ namespace Ruler
 				ChangeOrientation();
 			}
 
+			_dragMode = DragMode.None;
+
 			base.OnMouseUp(e);
 		}
 
 		protected override void OnMouseMove(MouseEventArgs e)
 		{
-			if (_resizeRegion != ResizeRegion.None)
+			switch (_dragMode)
 			{
-				HandleResize();
-				return;
-			}
-
-			Point clientCursorPos = PointToClient(MousePosition);
-			Rectangle resizeInnerRect = ClientRectangle;
-			resizeInnerRect.Inflate(-_resizeBorderWidth, -_resizeBorderWidth);
-
-			bool inResizableArea = ClientRectangle.Contains(clientCursorPos) && !resizeInnerRect.Contains(clientCursorPos);
-
-			if (inResizableArea && !IsLocked)
-			{
-				ResizeRegion resizeRegion = GetResizeRegion(clientCursorPos);
-				SetResizeCursor(resizeRegion);
-
-				if (e.Button == MouseButtons.Left)
-				{
-					_resizeRegion = resizeRegion;
-					HandleResize();
-				}
-			}
-			else
-			{
-				Cursor = Cursors.Default;
-
-				if (e.Button == MouseButtons.Left)
-				{
+				case DragMode.Move:
 					Location = new Point(MousePosition.X - _offset.X, MousePosition.Y - _offset.Y);
-				}
+					break;
+
+				case DragMode.Resize:
+					HandleResize();
+					break;
+
+				default:
+					if (IsInResizableArea() && !IsLocked)
+					{
+						Point clientCursorPos = PointToClient(MousePosition);
+						_resizeRegion = GetResizeRegion(clientCursorPos);
+						SetResizeCursor(_resizeRegion);
+					}
+					else
+					{
+						Cursor = Cursors.Default;
+					}
+					break;
 			}
 
 			Invalidate();
@@ -308,6 +312,15 @@ namespace Ruler
 			this.SetToolTip();
 
 			base.OnResize(e);
+		}
+
+		private bool IsInResizableArea()
+		{
+			Point clientCursorPos = PointToClient(MousePosition);
+			Rectangle resizeInnerRect = ClientRectangle;
+			resizeInnerRect.Inflate(-_resizeBorderWidth, -_resizeBorderWidth);
+
+			return ClientRectangle.Contains(clientCursorPos) && !resizeInnerRect.Contains(clientCursorPos);
 		}
 
 		private void SetToolTip()
