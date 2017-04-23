@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Resources;
@@ -33,6 +34,14 @@ namespace Ruler
 		private static Rectangle _lockIconRegionR;
 		private static Rectangle _rotateIconRegionR;
 
+		private static readonly Dictionary<string, Color> s_ColorDict = new Dictionary<string, Color>()
+		{
+			{"White", Color.White},
+			{"Yellow", Color.LightYellow},
+			{"Blue", Color.LightBlue},
+			{"Red", Color.LightSalmon},
+			{"Green", Color.LightGreen}
+		};
 
 		public MainForm()
 		{
@@ -119,10 +128,13 @@ namespace Ruler
 			}
 
 			// Add colors to color menus
-			string[] BGColors = new string[] { "White", "Yellow", "Blue", "Red", "Green" };
-			for (int i = 0; i < BGColors.Length; i++)
+			foreach (var color in s_ColorDict)
 			{
-				MenuItem subMenu = new MenuItem(BGColors[i]);
+				MenuItem subMenu = new MenuItem(color.Key);
+				if (color.Value == BackColor)
+				{
+					subMenu.Checked = true;
+				}
 				subMenu.Click += new EventHandler(ColorMenuHandler);
 				colorMenuItem.MenuItems.Add(subMenu);
 			}
@@ -652,24 +664,8 @@ namespace Ruler
 		{
 			MenuItem mi = (MenuItem)sender;
 			UncheckMenuItems(mi.Parent);
-			switch (mi.Text)
-			{
-				case "White":
-					BackColor = Color.White;
-					break;
-				case "Yellow":
-					BackColor = Color.LightYellow;
-					break;
-				case "Blue":
-					BackColor = Color.LightBlue;
-					break;
-				case "Red":
-					BackColor = Color.LightSalmon;
-					break;
-				case "Green":
-					BackColor = Color.LightGreen;
-					break;
-			}
+			BackColor = s_ColorDict[mi.Text];
+			mi.Checked = true;
 		}
 
 		private void MenuHandler(object sender, EventArgs e)
