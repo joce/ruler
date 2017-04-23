@@ -343,7 +343,10 @@ namespace Ruler
 				{
 					if (e.Shift)
 					{
-						Width += (1 * sign);
+						if (!IsLocked)
+						{
+							Width += (1 * sign);
+						}
 					}
 					else
 					{
@@ -361,7 +364,10 @@ namespace Ruler
 				{
 					if (e.Shift)
 					{
-						Height += (1 * sign);
+						if (!IsLocked)
+						{
+							Height += (1 * sign);
+						}
 					}
 					else
 					{
