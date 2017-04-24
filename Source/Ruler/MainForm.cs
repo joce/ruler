@@ -37,6 +37,7 @@ namespace Ruler
 		private ResizeRegion _resizeRegion = ResizeRegion.None;
 		private ContextMenu _menu = new ContextMenu();
 		private MenuItem _lockMenuItem;
+		private MenuItem _verticalMenuItem;
 		private DragMode _dragMode = DragMode.None;
 		private static Color _TickColor = ColorTranslator.FromHtml("#3E2815");
 		private static Color _CursorColor = Color.FromArgb(200, _TickColor);
@@ -118,7 +119,7 @@ namespace Ruler
 		private void SetUpMenu()
 		{
 			this.AddMenuItem("Stay On Top", Shortcut.None, this.StayOnTopHandler, TopMost);
-			this.AddMenuItem("Vertical", Shortcut.None, this.VerticalHandler, IsVertical);
+			_verticalMenuItem = this.AddMenuItem("Vertical", Shortcut.None, this.VerticalHandler, IsVertical);
 			this.AddMenuItem("Tool Tip", Shortcut.None, this.ToolTipHandler, ShowToolTip);
 			MenuItem opacityMenuItem = this.AddMenuItem("Opacity");
 			MenuItem colorMenuItem = this.AddMenuItem("Color");
@@ -184,7 +185,6 @@ namespace Ruler
 		private void VerticalHandler(object sender, EventArgs e)
 		{
 			ChangeOrientation();
-			((MenuItem)sender).Checked = this.IsVertical;
 		}
 
 		private void LockHandler(object sender, EventArgs e)
@@ -661,6 +661,7 @@ namespace Ruler
 			int width = Width;
 			this.Width = Height;
 			this.Height = width;
+			_verticalMenuItem.Checked = IsVertical;
 		}
 
 		private void InitializeComponent()
