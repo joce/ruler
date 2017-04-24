@@ -42,9 +42,7 @@ namespace Ruler
 		private static Color _TickColor = ColorTranslator.FromHtml("#3E2815");
 		private static Color _CursorColor = Color.FromArgb(200, _TickColor);
 		private static Region _lockIconRegion;
-		private static Region _rotateIconRegion;
 		private static Rectangle _lockIconRegionR;
-		private static Rectangle _rotateIconRegionR;
 
 		private static readonly Dictionary<string, Color> s_ColorDict = new Dictionary<string, Color>()
 		{
@@ -255,11 +253,6 @@ namespace Ruler
 			if (_lockIconRegion.IsVisible(e.Location) )
 			{
 				LockHandler(this, e);
-			}
-
-			if (_rotateIconRegion.IsVisible(e.Location))
-			{
-				ChangeOrientation();
 			}
 
 			_dragMode = DragMode.None;
@@ -574,22 +567,7 @@ namespace Ruler
 			// Keep a reference of the region where the icon is to detect a click on it
 			_lockIconRegion = new Region(_lockIconRegionR);
 
-			// Rotate Icon
-			Icon RotateIcon = GetIcon("RotateIcon");
-			Point RotateIconPoint = new Point(lockIconPoint.X - (10 + RotateIcon.Width), lockIconPoint.Y);
-			_rotateIconRegionR = new Rectangle(RotateIconPoint, RotateIcon.Size);
-
-			if (IsVertical)
-			{
-				_rotateIconRegionR = new Rectangle(new Point(10 , lockIconPoint.Y), lockIcon.Size);
-
-			}
-
-			_rotateIconRegion = new Region(_rotateIconRegionR);
-
-
 			g.DrawIcon(lockIcon, lockIconPoint.X, lockIconPoint.Y);
-			g.DrawIcon(RotateIcon, RotateIconPoint.X, RotateIconPoint.Y);
 		}
 
 
