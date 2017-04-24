@@ -229,6 +229,9 @@ namespace Ruler
 
 		protected override void OnDoubleClick(EventArgs e)
 		{
+			if (_lockIconRegion.IsVisible(PointToClient(MousePosition)))
+				return;
+
 			ChangeOrientation();
 			base.OnDoubleClick(e);
 		}
@@ -250,7 +253,7 @@ namespace Ruler
 		protected override void OnMouseUp(MouseEventArgs e)
 		{
 			_resizeRegion = ResizeRegion.None;
-			if (_lockIconRegion.IsVisible(e.Location) )
+			if (_lockIconRegion.IsVisible(e.Location))
 			{
 				LockHandler(this, e);
 			}
