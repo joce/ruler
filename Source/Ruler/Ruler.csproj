@@ -120,6 +120,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="RulerApplicationContext.cs" />
     <Compile Include="RulerInfo.cs" />
     <Compile Include="SetSizeForm.cs">
       <SubType>Form</SubType>

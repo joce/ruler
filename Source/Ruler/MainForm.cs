@@ -53,16 +53,15 @@ namespace Ruler
 			{"Green", Color.LightGreen}
 		};
 
-		public MainForm()
+		public MainForm() : this(RulerInfo.GetDefaultRulerInfo())
 		{
-			RulerInfo rulerInfo = RulerInfo.GetDefaultRulerInfo();
-
-			this.Init(rulerInfo);
 		}
 
 		public MainForm(RulerInfo rulerInfo)
 		{
 			this.Init(rulerInfo);
+			RulerApplicationContext context = RulerApplicationContext.CurrentContext;
+			context.RegisterRuler(this);
 		}
 
 		public bool IsVertical
@@ -127,7 +126,7 @@ namespace Ruler
 			this.AddMenuItem("-");
 			this.AddMenuItem("About...");
 			this.AddMenuItem("-");
-			this.AddMenuItem("Exit");
+			this.AddMenuItem("Close");
 
 			for (int i = 10; i <= 100; i += 10)
 			{
@@ -316,6 +315,13 @@ namespace Ruler
 				_toolTip.SetToolTip(this, string.Format("Width: {0} pixels\nHeight: {1} pixels", Width, Height));
 			else
 				_toolTip.RemoveAll();
+		}
+
+		public new void Close()
+		{
+			base.Close();
+			RulerApplicationContext context = RulerApplicationContext.CurrentContext;
+			context.UnregisterRuler(this);
 		}
 
 		protected override void OnKeyDown(KeyEventArgs e)
@@ -621,7 +627,7 @@ namespace Ruler
 
 			switch (mi.Text)
 			{
-				case "Exit":
+				case "Close":
 					Close();
 					break;
 
