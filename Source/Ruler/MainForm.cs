@@ -205,15 +205,9 @@ namespace Ruler
 
 		private void DuplicateHandler(object sender, EventArgs e)
 		{
-			string exe = System.Reflection.Assembly.GetExecutingAssembly().Location;
-
 			RulerInfo rulerInfo = this.GetRulerInfo();
-
-			ProcessStartInfo startInfo = new ProcessStartInfo(exe, rulerInfo.ConvertToParameters());
-
-			Process process = new Process();
-			process.StartInfo = startInfo;
-			process.Start();
+			var copy = new MainForm(rulerInfo);
+			copy.Show();
 		}
 
 		private MenuItem AddMenuItem(string text)
@@ -617,25 +611,6 @@ namespace Ruler
 		private void DrawTickLabel(Graphics g, string text, int xPos, int formHeight, int height)
 		{
 			g.DrawString(text, Font, new SolidBrush(_TickColor), xPos, height);
-		}
-
-		private static void Main(params string[] args)
-		{
-			Application.EnableVisualStyles();
-			Application.SetCompatibleTextRenderingDefault(false);
-
-			MainForm mainForm;
-
-			if (args.Length == 0)
-			{
-				mainForm = new MainForm();
-			}
-			else
-			{
-				mainForm = new MainForm(RulerInfo.CovertToRulerInfo(args));
-			}
-
-			Application.Run(mainForm);
 		}
 
 		private void UncheckMenuItems(Menu parent)
