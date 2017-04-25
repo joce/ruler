@@ -226,6 +226,13 @@ namespace Ruler
 			return mi;
 		}
 
+		protected override void OnFormClosed(FormClosedEventArgs e)
+		{
+			base.OnFormClosed(e);
+			RulerApplicationContext context = RulerApplicationContext.CurrentContext;
+			context.UnregisterRuler(this);
+		}
+
 		protected override void OnDoubleClick(EventArgs e)
 		{
 			if (_lockIconRegion.IsVisible(PointToClient(MousePosition)))
@@ -315,13 +322,6 @@ namespace Ruler
 				_toolTip.SetToolTip(this, string.Format("Width: {0} pixels\nHeight: {1} pixels", Width, Height));
 			else
 				_toolTip.RemoveAll();
-		}
-
-		public new void Close()
-		{
-			base.Close();
-			RulerApplicationContext context = RulerApplicationContext.CurrentContext;
-			context.UnregisterRuler(this);
 		}
 
 		protected override void OnKeyDown(KeyEventArgs e)

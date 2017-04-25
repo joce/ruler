@@ -1,5 +1,6 @@
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 
 //
 // General Information about an assembly is controlled through the following 
@@ -11,7 +12,7 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Jeff Key")]
 [assembly: AssemblyProduct("Ruler")]
-[assembly: AssemblyCopyright("Copyright © 2004-7, Jeff Key")]
+[assembly: AssemblyCopyright("Copyright ï¿½ 2004-7, Jeff Key")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]		
 
@@ -56,3 +57,4 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyDelaySign(false)]
 [assembly: AssemblyKeyFile("")]
 [assembly: AssemblyKeyName("")]
+[assembly: Guid("bafc08a9-6060-4811-b3c7-76be74bd4f25")]
