@@ -8,7 +8,7 @@ namespace Ruler
 	static class Program
 	{
 		[STAThread]
-		static void Main()
+		static void Main(string[] args)
 		{
 			string guid = "bafc08a9-6060-4811-b3c7-76be74bd4f25";
 			Mutex mutex = new Mutex(true, guid);
@@ -19,7 +19,7 @@ namespace Ruler
 					Application.EnableVisualStyles();
 					Application.SetCompatibleTextRenderingDefault(false);
 
-					Application.Run(new RulerApplicationContext(guid));
+					Application.Run(new RulerApplicationContext(args, guid));
 				}
 				finally
 				{
@@ -34,7 +34,7 @@ namespace Ruler
 						new EndpointAddress("net.pipe://localhost/" + guid));
 
 				ISingleInstanceService service = pipeFactory.CreateChannel();
-				service.StartNewRuler("");
+				service.StartNewRuler(args);
 			}
 		}
 	}

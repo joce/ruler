@@ -7,13 +7,13 @@ namespace Ruler
 	interface ISingleInstanceService
 	{
 		[OperationContract(IsOneWay = true)]
-		void StartNewRuler(string args);
+		void StartNewRuler(string[] args);
 	}
 
 	[ServiceBehavior(InstanceContextMode = InstanceContextMode.PerSession)]
 	class SingleInstanceService : ISingleInstanceService
 	{
-		public void StartNewRuler(string args)
+		public void StartNewRuler(string[] args)
 		{
 			lock (RulerApplicationContext.CurrentContext)
 			{
@@ -22,7 +22,7 @@ namespace Ruler
 				{
 					RulerApplicationContext.CurrentContext.MainForm.Invoke((MethodInvoker)delegate
 					{
-						var newRuler = new RulerForm();
+						var newRuler = new RulerForm(RulerInfo.CovertToRulerInfo(args));
 						newRuler.Show();
 					});
 				}

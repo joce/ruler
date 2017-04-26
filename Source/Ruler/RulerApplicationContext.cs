@@ -17,9 +17,13 @@ namespace Ruler
 			get { return _currContext; }
 		}
 
-		public RulerApplicationContext(string singleInstanceServiceAddress)
+		public RulerApplicationContext(string[] args, string singleInstanceServiceAddress)
 		{
 			_currContext = this;
+
+			// Open the first ruler
+			var ruler = new RulerForm(RulerInfo.CovertToRulerInfo(args));
+			ruler.Show();
 
 			// Start the listener for the single instance service
 			var host = new ServiceHost(typeof(SingleInstanceService),
@@ -27,10 +31,6 @@ namespace Ruler
 			host.AddServiceEndpoint(typeof(ISingleInstanceService),
 									new NetNamedPipeBinding(), singleInstanceServiceAddress);
 			host.Open();
-
-			// And open the first ruler
-			var ruler = new RulerForm();
-			ruler.Show();
 		}
 
 		// Disabled;

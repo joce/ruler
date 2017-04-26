@@ -71,6 +71,12 @@ namespace Ruler
 
 		public static RulerInfo CovertToRulerInfo(string[] args)
 		{
+			if (args.Length != 8)
+			{
+				// We need better handling of start arguments
+				return GetDefaultRulerInfo();
+			}
+
 			string width = args[0];
 			string height = args[1];
 			string isVertical = args[2];
