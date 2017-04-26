@@ -22,7 +22,7 @@ namespace Ruler
 				{
 					RulerApplicationContext.CurrentContext.MainForm.Invoke((MethodInvoker)delegate
 					{
-						var newRuler = new MainForm();
+						var newRuler = new RulerForm();
 						newRuler.Show();
 					});
 				}

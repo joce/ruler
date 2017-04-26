@@ -10,7 +10,7 @@ namespace Ruler
 	{
 		private static RulerApplicationContext _currContext;
 
-		readonly HashSet<MainForm> _openRulers = new HashSet<MainForm>();
+		readonly HashSet<RulerForm> _openRulers = new HashSet<RulerForm>();
 
 		public static RulerApplicationContext CurrentContext
 		{
@@ -29,7 +29,7 @@ namespace Ruler
 			host.Open();
 
 			// And open the first ruler
-			var ruler = new MainForm();
+			var ruler = new RulerForm();
 			ruler.Show();
 		}
 
@@ -37,7 +37,7 @@ namespace Ruler
 		private RulerApplicationContext(Form AppMainForm)
 		{ }
 
-		public void RegisterRuler(MainForm newRuler)
+		public void RegisterRuler(RulerForm newRuler)
 		{
 			_openRulers.Add(newRuler);
 			if (MainForm == null)
@@ -46,7 +46,7 @@ namespace Ruler
 			}
 		}
 
-		public void UnregisterRuler(MainForm ruler)
+		public void UnregisterRuler(RulerForm ruler)
 		{
 			_openRulers.Remove(ruler);
 

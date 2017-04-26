@@ -7,7 +7,7 @@ using System.Windows.Forms;
 
 namespace Ruler
 {
-	sealed public class MainForm : Form, IRulerInfo
+	sealed public class RulerForm : Form, IRulerInfo
 	{
 		[Flags]
 		private enum ResizeRegion
@@ -29,7 +29,7 @@ namespace Ruler
 		}
 
 		private ToolTip _toolTip = new ToolTip();
-		private ResourceManager _resources = new ResourceManager(typeof(MainForm));
+		private ResourceManager _resources = new ResourceManager(typeof(RulerForm));
 		private Point _offset;
 		private Rectangle _mouseDownRect;
 		private int _resizeBorderWidth = 5;
@@ -53,11 +53,11 @@ namespace Ruler
 			{"Green", Color.LightGreen}
 		};
 
-		public MainForm() : this(RulerInfo.GetDefaultRulerInfo())
+		public RulerForm() : this(RulerInfo.GetDefaultRulerInfo())
 		{
 		}
 
-		public MainForm(RulerInfo rulerInfo)
+		public RulerForm(RulerInfo rulerInfo)
 		{
 			this.Init(rulerInfo);
 			RulerApplicationContext context = RulerApplicationContext.CurrentContext;
@@ -202,7 +202,7 @@ namespace Ruler
 			lock (RulerApplicationContext.CurrentContext)
 			{
 				RulerInfo rulerInfo = this.GetRulerInfo();
-				var copy = new MainForm(rulerInfo);
+				var copy = new RulerForm(rulerInfo);
 				copy.Show();
 			}
 		}
@@ -659,16 +659,16 @@ namespace Ruler
 
 		private void InitializeComponent()
 		{
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(RulerForm));
 			this.SuspendLayout();
 			//
-			// MainForm
+			// RulerForm
 			//
 			this.ClientSize = new System.Drawing.Size(25, 25);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.MinimumSize = new System.Drawing.Size(25, 25);
-			this.Name = "MainForm";
+			this.Name = "RulerForm";
 			this.ResumeLayout(false);
 
 		}
