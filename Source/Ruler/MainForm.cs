@@ -199,9 +199,12 @@ namespace Ruler
 
 		private void DuplicateHandler(object sender, EventArgs e)
 		{
-			RulerInfo rulerInfo = this.GetRulerInfo();
-			var copy = new MainForm(rulerInfo);
-			copy.Show();
+			lock (RulerApplicationContext.CurrentContext)
+			{
+				RulerInfo rulerInfo = this.GetRulerInfo();
+				var copy = new MainForm(rulerInfo);
+				copy.Show();
+			}
 		}
 
 		private MenuItem AddMenuItem(string text)
@@ -228,9 +231,12 @@ namespace Ruler
 
 		protected override void OnFormClosed(FormClosedEventArgs e)
 		{
-			base.OnFormClosed(e);
-			RulerApplicationContext context = RulerApplicationContext.CurrentContext;
-			context.UnregisterRuler(this);
+			lock (RulerApplicationContext.CurrentContext)
+			{
+				base.OnFormClosed(e);
+				RulerApplicationContext context = RulerApplicationContext.CurrentContext;
+				context.UnregisterRuler(this);
+			}
 		}
 
 		protected override void OnDoubleClick(EventArgs e)

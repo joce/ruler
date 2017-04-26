@@ -1,4 +1,5 @@
 using System;
+using System.ServiceModel;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -9,7 +10,8 @@ namespace Ruler
 		[STAThread]
 		static void Main()
 		{
-			Mutex mutex = new Mutex(true, "{bafc08a9-6060-4811-b3c7-76be74bd4f25}");
+			string guid = "bafc08a9-6060-4811-b3c7-76be74bd4f25";
+			Mutex mutex = new Mutex(true, guid);
 			if (mutex.WaitOne(TimeSpan.Zero, true))
 			{
 				try
@@ -17,7 +19,7 @@ namespace Ruler
 					Application.EnableVisualStyles();
 					Application.SetCompatibleTextRenderingDefault(false);
 
-					Application.Run(new RulerApplicationContext());
+					Application.Run(new RulerApplicationContext(guid));
 				}
 				finally
 				{
@@ -26,8 +28,13 @@ namespace Ruler
 			}
 			else
 			{
-				// Need to notify the other app
-				MessageBox.Show("JOCE");
+				var pipeFactory =
+					new ChannelFactory<ISingleInstanceService>(
+						new NetNamedPipeBinding(),
+						new EndpointAddress("net.pipe://localhost/" + guid));
+
+				ISingleInstanceService service = pipeFactory.CreateChannel();
+				service.StartNewRuler("");
 			}
 		}
 	}

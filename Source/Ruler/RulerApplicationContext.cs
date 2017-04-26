@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.ServiceModel;
 using System.Windows.Forms;
 
 namespace Ruler
@@ -15,9 +17,18 @@ namespace Ruler
 			get { return _currContext; }
 		}
 
-		public RulerApplicationContext()
+		public RulerApplicationContext(string singleInstanceServiceAddress)
 		{
 			_currContext = this;
+
+			// Start the listener for the single instance service
+			var host = new ServiceHost(typeof(SingleInstanceService),
+									   new Uri("net.pipe://localhost"));
+			host.AddServiceEndpoint(typeof(ISingleInstanceService),
+									new NetNamedPipeBinding(), singleInstanceServiceAddress);
+			host.Open();
+
+			// And open the first ruler
 			var ruler = new MainForm();
 			ruler.Show();
 		}
@@ -29,14 +40,23 @@ namespace Ruler
 		public void RegisterRuler(MainForm newRuler)
 		{
 			_openRulers.Add(newRuler);
+			if (MainForm == null)
+			{
+				MainForm = newRuler;
+			}
 		}
 
 		public void UnregisterRuler(MainForm ruler)
 		{
 			_openRulers.Remove(ruler);
+
 			if (!_openRulers.Any())
 			{
 				Application.Exit();
+			}
+			else if (MainForm == ruler)
+			{
+				MainForm = _openRulers.First();
 			}
 		}
 	}

@@ -57,4 +57,3 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyDelaySign(false)]
 [assembly: AssemblyKeyFile("")]
 [assembly: AssemblyKeyName("")]
-[assembly: Guid("bafc08a9-6060-4811-b3c7-76be74bd4f25")]
