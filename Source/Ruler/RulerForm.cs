@@ -64,10 +64,87 @@ namespace Ruler
 			context.RegisterRuler(this);
 		}
 
+		private int _length;
+		public int Length
+		{
+			get { return _length; }
+			set
+			{
+				if (value == _length) return;
+				_length = value;
+				if (IsVertical)
+				{
+					base.Height = _length;
+				}
+				else
+				{
+					base.Width = _length;
+				}
+			}
+		}
+
+		private int _thickness;
+		public int Thickness
+		{
+			get { return _thickness; }
+			set
+			{
+				if (value == _thickness) return;
+				_thickness = value;
+				if (IsVertical)
+				{
+					base.Width = _thickness;
+				}
+				else
+				{
+					base.Height = _thickness;
+				}
+			}
+		}
+
+		private bool _isVertical;
 		public bool IsVertical
 		{
-			get;
-			set;
+			get { return _isVertical; }
+			set
+			{
+				if (value == _isVertical) return;
+				_isVertical = value;
+				base.Width = IsVertical ? Thickness : Length;
+				base.Height = IsVertical ? Length : Thickness;
+			}
+		}
+
+		public new int Width
+		{
+			get { return base.Width; }
+			set
+			{
+				if (IsVertical)
+				{
+					Thickness = value;
+				}
+				else
+				{
+					Length = value;
+				}
+			}
+		}
+
+		public new int Height
+		{
+			get { return base.Height; }
+			set
+			{
+				if (IsVertical)
+				{
+					Length = value;
+				}
+				else
+				{
+					Thickness = value;
+				}
+			}
 		}
 
 		public bool IsLocked
@@ -121,7 +198,7 @@ namespace Ruler
 			MenuItem opacityMenuItem = this.AddMenuItem("Opacity");
 			MenuItem colorMenuItem = this.AddMenuItem("Color");
 			_lockMenuItem = this.AddMenuItem("Lock resizing", Shortcut.None, this.LockHandler, IsLocked);
-			this.AddMenuItem("Set size...", Shortcut.None, this.SetWidthHeightHandler);
+			this.AddMenuItem("Set size...", Shortcut.None, this.SetSizeHandler);
 			this.AddMenuItem("Duplicate", Shortcut.None, this.DuplicateHandler);
 			this.AddMenuItem("-");
 			this.AddMenuItem("About...");
@@ -154,9 +231,9 @@ namespace Ruler
 			return (Icon)(_resources.GetObject(name));
 		}
 
-		private void SetWidthHeightHandler(object sender, EventArgs e)
+		private void SetSizeHandler(object sender, EventArgs e)
 		{
-			SetSizeForm form = new SetSizeForm(this.Width, this.Height);
+			SetSizeForm form = new SetSizeForm(this.Length, this.Thickness);
 
 			if (this.TopMost)
 			{
@@ -165,10 +242,10 @@ namespace Ruler
 
 			if (form.ShowDialog() == System.Windows.Forms.DialogResult.OK)
 			{
-				Size size = form.GetNewSize();
+				Dimension dim = form.GetNewDimension();
 
-				this.Width = size.Width;
-				this.Height = size.Height;
+				this.Length = dim.Length;
+				this.Thickness = dim.Thickness;
 			}
 		}
 
@@ -325,7 +402,7 @@ namespace Ruler
 		private void SetToolTip()
 		{
 			if (ShowToolTip)
-				_toolTip.SetToolTip(this, string.Format("Width: {0} pixels\nHeight: {1} pixels", Width, Height));
+				_toolTip.SetToolTip(this, string.Format("Length: {0} pixels\nThickness: {1} pixels", Length, Thickness));
 			else
 				_toolTip.RemoveAll();
 		}
@@ -478,18 +555,13 @@ namespace Ruler
 		{
 			Graphics graphics = e.Graphics;
 
-			int height = Height;
-			int width = Width;
-
 			if (IsVertical)
 			{
 				graphics.RotateTransform(90);
 				graphics.TranslateTransform(0, -Width + 1);
-				height = Width;
-				width = Height;
 			}
 
-			DrawRuler(graphics, width, height);
+			DrawRuler(graphics, Length, Thickness);
 
 			base.OnPaint(e);
 		}
@@ -651,9 +723,6 @@ namespace Ruler
 		private void ChangeOrientation()
 		{
 			this.IsVertical = !IsVertical;
-			int width = Width;
-			this.Width = Height;
-			this.Height = width;
 			_verticalMenuItem.Checked = IsVertical;
 		}
 

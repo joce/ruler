@@ -10,18 +10,18 @@ namespace Ruler
 {
 	public partial class SetSizeForm : Form
 	{
-		private int originalWidth;
-		private int originalHeight;
+		private int originalLength;
+		private int originalThickness;
 
-		public SetSizeForm(int initWidth, int initHeight)
+		public SetSizeForm(int initLength, int initThickness)
 		{
 			this.InitializeComponent();
 
-			this.originalWidth = initWidth;
-			this.originalHeight = initHeight;
+			this.originalLength = initLength;
+			this.originalThickness = initThickness;
 
-			this.txtWidth.Text = initWidth.ToString();
-			this.txtHeight.Text = initHeight.ToString();
+			this.txtLength.Text = initLength.ToString();
+			this.txtThickness.Text = initThickness.ToString();
 		}
 
 		private void BtnCancelClick(object sender, EventArgs e)
@@ -35,17 +35,17 @@ namespace Ruler
 			this.DialogResult = System.Windows.Forms.DialogResult.OK;
 		}
 
-		public Size GetNewSize()
+		public Dimension GetNewDimension()
 		{
-			int width;
-			int height;
+			int length;
+			int thickness;
 
-			Size size = new Size();
+			Dimension dimension = new Dimension();
 
-			size.Width = int.TryParse(this.txtWidth.Text, out width) ? width : originalWidth;
-			size.Height = int.TryParse(this.txtHeight.Text, out height) ? height : originalHeight;
+			dimension.Length = int.TryParse(this.txtLength.Text, out length) ? length : originalLength;
+			dimension.Thickness = int.TryParse(this.txtThickness.Text, out thickness) ? thickness : originalThickness;
 
-			return size;
+			return dimension;
 		}
 	}
 }

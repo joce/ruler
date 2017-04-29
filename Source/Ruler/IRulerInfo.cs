@@ -7,13 +7,13 @@ namespace Ruler
 {
 	public interface IRulerInfo
 	{
-		int Width
+		int Length
 		{
 			get;
 			set;
 		}
 
-		int Height
+		int Thickness
 		{
 			get;
 			set;

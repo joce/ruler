@@ -7,13 +7,13 @@ namespace Ruler
 {
 	public class RulerInfo : IRulerInfo
 	{
-		public int Width
+		public int Length
 		{
 			get;
 			set;
 		}
 
-		public int Height
+		public int Thickness
 		{
 			get;
 			set;
@@ -66,7 +66,7 @@ namespace Ruler
 
 		public string ConvertToParameters()
 		{
-			return string.Format("{0} {1} {2} {3} {4} {5} {6} {7}", this.Width, this.Height, this.IsVertical, this.Opacity, this.ShowToolTip, this.IsLocked, this.TopMost, this.BackColor.Name);
+			return string.Format("{0} {1} {2} {3} {4} {5} {6} {7}", this.Length, this.Thickness, this.IsVertical, this.Opacity, this.ShowToolTip, this.IsLocked, this.TopMost, this.BackColor.Name);
 		}
 
 		public static RulerInfo CovertToRulerInfo(string[] args)
@@ -88,8 +88,8 @@ namespace Ruler
 
 			RulerInfo rulerInfo = new RulerInfo();
 
-			rulerInfo.Width = int.Parse(width);
-			rulerInfo.Height = int.Parse(height);
+			rulerInfo.Length = int.Parse(width);
+			rulerInfo.Thickness = int.Parse(height);
 			rulerInfo.IsVertical = bool.Parse(isVertical);
 			rulerInfo.Opacity = double.Parse(opacity);
 			rulerInfo.ShowToolTip = bool.Parse(showToolTip);
@@ -104,8 +104,8 @@ namespace Ruler
 		{
 			RulerInfo rulerInfo = new RulerInfo();
 
-			rulerInfo.Width = 500;
-			rulerInfo.Height = 126;
+			rulerInfo.Length = 500;
+			rulerInfo.Thickness = 126;
 			rulerInfo.Opacity = 0.6;
 			rulerInfo.ShowToolTip = false;
 			rulerInfo.IsLocked = false;
@@ -122,8 +122,8 @@ namespace Ruler
 		public static void CopyInto<T>(this IRulerInfo ruler, T targetInstance)
 			where T : IRulerInfo
 		{
-			targetInstance.Width = ruler.Width;
-			targetInstance.Height = ruler.Height;
+			targetInstance.Length = ruler.Length;
+			targetInstance.Thickness = ruler.Thickness;
 			targetInstance.IsVertical = ruler.IsVertical;
 			targetInstance.Opacity = ruler.Opacity;
 			targetInstance.ShowToolTip = ruler.ShowToolTip;
