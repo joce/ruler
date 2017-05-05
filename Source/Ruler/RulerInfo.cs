@@ -64,14 +64,26 @@ namespace Ruler
 			set;
 		}
 
+		public bool ShowUpTicks
+		{
+			get;
+			set;
+		}
+
+		public bool ShowDownTicks
+		{
+			get;
+			set;
+		}
+
 		public string ConvertToParameters()
 		{
-			return string.Format("{0} {1} {2} {3} {4} {5} {6} {7}", this.Length, this.Thickness, this.IsVertical, this.Opacity, this.ShowToolTip, this.IsLocked, this.TopMost, this.BackColor.Name);
+			return string.Format("{0} {1} {2} {3} {4} {5} {6} {7} {8} {9}", this.Length, this.Thickness, this.IsVertical, this.Opacity, this.ShowToolTip, this.IsLocked, this.TopMost, this.BackColor.Name, this.ShowUpTicks, this.ShowDownTicks);
 		}
 
 		public static RulerInfo CovertToRulerInfo(string[] args)
 		{
-			if (args.Length != 8)
+			if (args.Length != 10)
 			{
 				// We need better handling of start arguments
 				return GetDefaultRulerInfo();
@@ -85,6 +97,8 @@ namespace Ruler
 			string isLocked = args[5];
 			string topMost = args[6];
 			string backColor = args[7];
+			string showUpTicks = args[8];
+			string showDownTicks = args[9];
 
 			RulerInfo rulerInfo = new RulerInfo();
 
@@ -96,6 +110,8 @@ namespace Ruler
 			rulerInfo.IsLocked = bool.Parse(isLocked);
 			rulerInfo.TopMost = bool.Parse(topMost);
 			rulerInfo.BackColor = Color.FromName(backColor);
+			rulerInfo.ShowUpTicks = bool.Parse(showUpTicks);
+			rulerInfo.ShowDownTicks = bool.Parse(showDownTicks);
 
 			return rulerInfo;
 		}
@@ -112,6 +128,8 @@ namespace Ruler
 			rulerInfo.IsVertical = false;
 			rulerInfo.TopMost = false;
 			rulerInfo.BackColor = Color.White;
+			rulerInfo.ShowUpTicks = true;
+			rulerInfo.ShowDownTicks = false;
 
 			return rulerInfo;
 		}
@@ -130,6 +148,8 @@ namespace Ruler
 			targetInstance.IsLocked = ruler.IsLocked;
 			targetInstance.TopMost = ruler.TopMost;
 			targetInstance.BackColor = ruler.BackColor;
+			targetInstance.ShowUpTicks = ruler.ShowUpTicks;
+			targetInstance.ShowDownTicks = ruler.ShowDownTicks;
 		}
 	}
 }

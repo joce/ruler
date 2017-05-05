@@ -49,6 +49,18 @@ namespace Ruler
 			set;
 		}
 
+		bool ShowUpTicks
+		{
+			get;
+			set;
+		}
+
+		bool ShowDownTicks
+		{
+			get;
+			set;
+		}
+
 		Color BackColor
 		{
 			get;

@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Resources;
 using System.Windows.Forms;
 
@@ -39,10 +39,9 @@ namespace Ruler
 		private MenuItem _lockMenuItem;
 		private MenuItem _verticalMenuItem;
 		private DragMode _dragMode = DragMode.None;
+		private Region _lockIconRegion;
 		private static Color _TickColor = ColorTranslator.FromHtml("#3E2815");
 		private static Color _CursorColor = Color.FromArgb(200, _TickColor);
-		private static Region _lockIconRegion;
-		private static Rectangle _lockIconRegionR;
 
 		private static readonly Dictionary<string, Color> s_ColorDict = new Dictionary<string, Color>()
 		{
@@ -71,14 +70,15 @@ namespace Ruler
 			set
 			{
 				if (value == _length) return;
-				_length = value;
 				if (IsVertical)
 				{
-					base.Height = _length;
+					base.Height = value;
+					_length = base.Height;
 				}
 				else
 				{
-					base.Width = _length;
+					base.Width = value;
+					_length = base.Width;
 				}
 			}
 		}
@@ -90,14 +90,16 @@ namespace Ruler
 			set
 			{
 				if (value == _thickness) return;
-				_thickness = value;
 				if (IsVertical)
 				{
-					base.Width = _thickness;
+					base.Width = value;
+					_thickness = base.Width;
 				}
 				else
 				{
-					base.Height = _thickness;
+					base.Height = value;
+					_thickness = base.Height;
+
 				}
 			}
 		}
@@ -159,6 +161,30 @@ namespace Ruler
 			set;
 		}
 
+		private bool _showUpTicks;
+		public bool ShowUpTicks
+		{
+			get { return _showUpTicks; }
+			set
+			{
+				if (value == _showUpTicks) return;
+				_showUpTicks = value;
+				Invalidate();
+			}
+		}
+
+		private bool _showDownTicks;
+		public bool ShowDownTicks
+		{
+			get { return _showDownTicks; }
+			set
+			{
+				if (value == _showDownTicks) return;
+				_showDownTicks = value;
+				Invalidate();
+			}
+		}
+
 		private void Init(RulerInfo rulerInfo)
 		{
 			InitializeComponent();
@@ -197,6 +223,7 @@ namespace Ruler
 			this.AddMenuItem("Tool Tip", Shortcut.None, this.ToolTipHandler, ShowToolTip);
 			MenuItem opacityMenuItem = this.AddMenuItem("Opacity");
 			MenuItem colorMenuItem = this.AddMenuItem("Color");
+			MenuItem ticksMenuItem = this.AddMenuItem("Ticks");
 			_lockMenuItem = this.AddMenuItem("Lock resizing", Shortcut.None, this.LockHandler, IsLocked);
 			this.AddMenuItem("Set size...", Shortcut.None, this.SetSizeHandler);
 			this.AddMenuItem("Duplicate", Shortcut.None, this.DuplicateHandler);
@@ -224,6 +251,17 @@ namespace Ruler
 				subMenu.Click += new EventHandler(ColorMenuHandler);
 				colorMenuItem.MenuItems.Add(subMenu);
 			}
+
+			// Ticks sub menus
+			MenuItem upTicksSubMenu = new MenuItem("Show up ticks");
+			upTicksSubMenu.Checked = ShowUpTicks;
+			upTicksSubMenu.Click += new EventHandler(UpTickMenuHandler);
+			ticksMenuItem.MenuItems.Add(upTicksSubMenu);
+
+			MenuItem downTicksSubMenu = new MenuItem("Show down ticks");
+			downTicksSubMenu.Checked = ShowDownTicks;
+			downTicksSubMenu.Click += new EventHandler(DownTickMenuHandler);
+			ticksMenuItem.MenuItems.Add(downTicksSubMenu);
 		}
 
 		private Icon GetIcon(string name)
@@ -272,6 +310,18 @@ namespace Ruler
 		{
 			TopMost = !TopMost;
 			((MenuItem)sender).Checked = TopMost;
+		}
+
+		private void UpTickMenuHandler(object sender, EventArgs e)
+		{
+			ShowUpTicks = !ShowUpTicks;
+			((MenuItem)sender).Checked = ShowUpTicks;
+		}
+
+		private void DownTickMenuHandler(object sender, EventArgs e)
+		{
+			ShowDownTicks = !ShowDownTicks;
+			((MenuItem)sender).Checked = ShowDownTicks;
 		}
 
 		private void DuplicateHandler(object sender, EventArgs e)
@@ -487,8 +537,10 @@ namespace Ruler
 			}
 			else if ((_resizeRegion & ResizeRegion.W) == ResizeRegion.W)
 			{
-				Left = MousePosition.X;
+				int prevWidth = Width;
 				Width = _mouseDownRect.Width - xDiff;
+				if (prevWidth != Width)
+					Left = MousePosition.X;
 			}
 
 			int yDiff = MousePosition.Y - _mouseDownPoint.Y;
@@ -498,8 +550,10 @@ namespace Ruler
 			}
 			else if ((_resizeRegion & ResizeRegion.N) == ResizeRegion.N)
 			{
-				Top = MousePosition.Y;
+				int prevHeight = Height;
 				Height = _mouseDownRect.Height - yDiff;
+				if (prevHeight != Height)
+					Top = MousePosition.Y;
 			}
 		}
 
@@ -573,106 +627,154 @@ namespace Ruler
 
 			DrawTicks(g, formWidth, formHeight);
 
-			DrawCursor(g, formWidth, formHeight);
+			DrawCursor(g, formHeight);
 
 			// Rotate everything after this if we are vertical
 			if (IsVertical)
+			{
+				g.TranslateTransform(0, Width - 1);
 				g.RotateTransform(-90);
+			}
 
-			DrawDynamicLabels(g, formWidth, formHeight);
-
-			DrawIcons(g, formWidth, formHeight);
-
+			DrawDynamicLabelsAndIcon(g);
 		}
 
 		private void DrawTicks(Graphics g, int formWidth, int formHeight)
 		{
-			for (int i = 0; i < formWidth; i++)
+			for (int i = 0; i < formWidth; i+=2)
 			{
-				if (i % 2 == 0)
+				int tickHeight;
+				if (i % 100 == 0)
 				{
-					int tickHeight;
-					if (i % 100 == 0)
-					{
-						tickHeight = 15;
-						DrawTickLabel(g, i.ToString(), i, formHeight, tickHeight);
-					}
-					else if (i % 10 == 0)
-					{
-						tickHeight = 10;
-					}
-					else
-					{
-						tickHeight = 5;
-					}
-
-					DrawTick(g, i, formHeight, tickHeight);
+					tickHeight = 15;
+					DrawTickLabel(g, i.ToString(), i, formHeight, tickHeight);
 				}
+				else if (i % 10 == 0)
+				{
+					tickHeight = 10;
+				}
+				else
+				{
+					tickHeight = 5;
+				}
+
+				DrawTick(g, i, formHeight, tickHeight);
 			}
 		}
 
-		private void DrawDynamicLabels(Graphics g, int formWidth, int formHeight)
+		private Point GetDimensionLabelPos(SizeF dimensionTextSize, bool useVertical)
+		{
+			const int distanceToBorder = 15;
+			if (useVertical)
+			{
+				if (!ShowDownTicks)
+					return new Point(distanceToBorder, distanceToBorder);
+
+				if (!ShowUpTicks)
+					return new Point(Width-(int)dimensionTextSize.Width - distanceToBorder, distanceToBorder);
+
+				return new Point((Width - (int)dimensionTextSize.Width)/2, distanceToBorder);
+			}
+
+			// For very slim rulers, center the labels in height
+			if ((Thickness - (Font.Height * 2)) <= (distanceToBorder * 2))
+				return new Point(distanceToBorder, (Thickness / 2)- Font.Height);
+
+			if (!ShowDownTicks)
+				return new Point(distanceToBorder, Thickness - (Font.Height * 2 + distanceToBorder));
+
+			if (!ShowUpTicks)
+				return new Point(distanceToBorder, distanceToBorder);
+
+			return new Point(distanceToBorder, (Thickness / 2)- Font.Height);
+		}
+
+		private int GetCursorPos()
 		{
 			Point pos = PointToClient(MousePosition);
-			int taX = 10;
-			int taY = formHeight - (Font.Height * 3);
-			int tbX = taX;
-			int tbY = formHeight - (Font.Height * 2);
-			string dimensionLabelText = formWidth + "W x " + formHeight + "H px";
-			string cursorLabelText = pos.X + "px";
+			int op = IsVertical ? pos.Y : pos.X;
+			return (op < 0) ? 0 : ((op > Length) ? Length : op);
+		}
 
-			// Rotate the labels if we are Vertical
-			if (IsVertical)
+		private void DrawDynamicLabelsAndIcon(Graphics g)
+		{
+			string dimensionLabelText = Width + "x" + Height + " px";
+			string cursorLabelText = GetCursorPos() + " px";
+			SizeF dimensionTextSize = g.MeasureString(dimensionLabelText, Font);
+
+			bool transformLockRegion = false;
+			bool useVertical = IsVertical;
+			if (IsVertical && Width < 105)
 			{
-				taX = (formHeight * -1) + 10;
-				taY = formWidth - (Font.Height * 5);
-				tbX = (formHeight * -1) + 10;
-				tbY = formWidth - (Font.Height * 4);
-				dimensionLabelText = formHeight + "W x " + formWidth + "H px";
-				cursorLabelText = pos.Y + "px";
+				useVertical = false;
+				g.RotateTransform(90);
+				g.TranslateTransform(0, -Width + 1);
+				transformLockRegion = true;
 			}
+
+			Point labelPos = GetDimensionLabelPos(dimensionTextSize, useVertical);
+			int taX = labelPos.X;
+			int taY = labelPos.Y;
+			int tbX = labelPos.X;
+			int tbY = labelPos.Y + Font.Height;
 
 			// Dimensions labels
 			g.DrawString(dimensionLabelText, Font, new SolidBrush(_TickColor), taX, taY);
 			g.DrawString(cursorLabelText, Font, new SolidBrush(_CursorColor), tbX, tbY);
+
+			DrawIcon(g, taX + (int)dimensionTextSize.Width, tbY, transformLockRegion);
 		}
 
-		private void DrawIcons(Graphics g, int formWidth, int formHeight)
+		private Point GetIconPos(Bitmap icon, int leftPos, int bottomPos)
 		{
+			return new Point(leftPos - icon.Width - 1, bottomPos+2);
+		}
 
+		private void DrawIcon(Graphics g, int leftPos, int bottomPos, bool transformLockRegion)
+		{
 			// Lock Icon
-			Icon lockIcon = IsLocked ? GetIcon("LockIcon") : GetIcon("UnlockIcon");
-			Point lockIconPoint = new Point((formWidth - lockIcon.Width) - 10, formHeight - (lockIcon.Height * 2));
-			_lockIconRegionR = new Rectangle(lockIconPoint, lockIcon.Size);
-
-			if (IsVertical)
+			Bitmap lockIcon = (IsLocked ? GetIcon("LockIcon") : GetIcon("UnlockIcon")).ToBitmap();
+			Point lockIconPoint = GetIconPos(lockIcon, leftPos, bottomPos);
+			Point lockRegionPt = lockIconPoint;
+			if (transformLockRegion)
 			{
-				lockIconPoint = new Point((formHeight * -1) + (20 + lockIcon.Width), formWidth - (lockIcon.Height * 2));
-				_lockIconRegionR = new Rectangle(new Point((20 + lockIcon.Width), lockIconPoint.Y) , lockIcon.Size);
+				lockRegionPt = new Point(Width - lockIconPoint.Y - lockIcon.Height, lockIconPoint.X);
 			}
-
 			// Keep a reference of the region where the icon is to detect a click on it
-			_lockIconRegion = new Region(_lockIconRegionR);
+			_lockIconRegion = new Region(new Rectangle(lockRegionPt, lockIcon.Size));
 
-			g.DrawIcon(lockIcon, lockIconPoint.X, lockIconPoint.Y);
+			g.DrawImage(lockIcon, lockIconPoint.X, lockIconPoint.Y);
 		}
 
-
-		private void DrawCursor(Graphics g, int formWidth, int formHeight)
+		private void DrawCursor(Graphics g, int formHeight)
 		{
-			Point p = PointToClient(MousePosition);
-			int op = IsVertical ? p.Y : p.X;
-			g.DrawLine(new Pen(_CursorColor), new Point(op, 0), new Point(op, formHeight));
+			int pos = GetCursorPos();
+			g.DrawLine(new Pen(_CursorColor), new Point(pos, 0), new Point(pos, formHeight));
 		}
 
-		private static void DrawTick(Graphics g, int xPos, int formHeight, int tickHeight)
+		private void DrawTick(Graphics g, int xPos, int formHeight, int tickHeight)
 		{
-			g.DrawLine(new Pen(_TickColor), xPos, 0, xPos, tickHeight);
+			if (ShowUpTicks)
+				g.DrawLine(new Pen(_TickColor), xPos, 0, xPos, tickHeight);
+
+			if (ShowDownTicks)
+				g.DrawLine(Pens.Black, xPos, formHeight, xPos, formHeight - tickHeight);
 		}
 
 		private void DrawTickLabel(Graphics g, string text, int xPos, int formHeight, int height)
 		{
-			g.DrawString(text, Font, new SolidBrush(_TickColor), xPos, height);
+			if (ShowUpTicks && ShowDownTicks && formHeight <= 60)
+			{
+				// When space is limited and we have to draw labels for both up and down ticks, only draw in the middle of the ruler
+				g.DrawString(text, Font, new SolidBrush(_TickColor), xPos, (formHeight-FontHeight)/2);
+				return;
+			}
+
+			if (ShowUpTicks)
+				g.DrawString(text, Font, new SolidBrush(_TickColor), xPos, height);
+
+			if (ShowDownTicks)
+				g.DrawString(text, Font, Brushes.Black, xPos, formHeight - height - Font.Height);
 		}
 
 		private void UncheckMenuItems(Menu parent)
@@ -722,6 +824,7 @@ namespace Ruler
 
 		private void ChangeOrientation()
 		{
+			MinimumSize = new Size(MinimumSize.Height, MinimumSize.Width);
 			this.IsVertical = !IsVertical;
 			_verticalMenuItem.Checked = IsVertical;
 		}
@@ -733,10 +836,10 @@ namespace Ruler
 			//
 			// RulerForm
 			//
-			this.ClientSize = new System.Drawing.Size(25, 25);
+			this.ClientSize = new System.Drawing.Size(100, 55);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-			this.MinimumSize = new System.Drawing.Size(25, 25);
+			this.MinimumSize = new System.Drawing.Size(100, 55);
 			this.Name = "RulerForm";
 			this.ResumeLayout(false);
 
