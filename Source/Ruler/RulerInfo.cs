@@ -102,9 +102,11 @@ namespace Ruler
 
 			RulerInfo rulerInfo = new RulerInfo();
 
+			// IsVertical needs to be set first to ensure the min size are properly set 
+			// before Length and Thickness are set.
+			rulerInfo.IsVertical = bool.Parse(isVertical);
 			rulerInfo.Length = int.Parse(width);
 			rulerInfo.Thickness = int.Parse(height);
-			rulerInfo.IsVertical = bool.Parse(isVertical);
 			rulerInfo.Opacity = double.Parse(opacity);
 			rulerInfo.ShowToolTip = bool.Parse(showToolTip);
 			rulerInfo.IsLocked = bool.Parse(isLocked);
@@ -140,9 +142,11 @@ namespace Ruler
 		public static void CopyInto<T>(this IRulerInfo ruler, T targetInstance)
 			where T : IRulerInfo
 		{
+			// IsVertical needs to be set first to ensure the min size are properly set 
+			// before Length and Thickness are set.
+			targetInstance.IsVertical = ruler.IsVertical;
 			targetInstance.Length = ruler.Length;
 			targetInstance.Thickness = ruler.Thickness;
-			targetInstance.IsVertical = ruler.IsVertical;
 			targetInstance.Opacity = ruler.Opacity;
 			targetInstance.ShowToolTip = ruler.ShowToolTip;
 			targetInstance.IsLocked = ruler.IsLocked;

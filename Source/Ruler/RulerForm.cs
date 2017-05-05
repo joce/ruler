@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Linq;
 using System.Resources;
 using System.Windows.Forms;
 
@@ -111,6 +112,7 @@ namespace Ruler
 			set
 			{
 				if (value == _isVertical) return;
+				MinimumSize = new Size(MinimumSize.Height, MinimumSize.Width);
 				_isVertical = value;
 				base.Width = IsVertical ? Thickness : Length;
 				base.Height = IsVertical ? Length : Thickness;
@@ -824,7 +826,6 @@ namespace Ruler
 
 		private void ChangeOrientation()
 		{
-			MinimumSize = new Size(MinimumSize.Height, MinimumSize.Width);
 			this.IsVertical = !IsVertical;
 			_verticalMenuItem.Checked = IsVertical;
 		}
