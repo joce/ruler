@@ -1,8 +1,5 @@
 using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Drawing.Drawing2D;
-using System.Linq;
 using System.Resources;
 using System.Windows.Forms;
 
@@ -44,16 +41,7 @@ namespace Ruler
 		private static Color _TickColor = ColorTranslator.FromHtml("#3E2815");
 		private static Color _CursorColor = Color.FromArgb(200, _TickColor);
 
-		private static readonly Dictionary<string, Color> s_ColorDict = new Dictionary<string, Color>()
-		{
-			{"White", Color.White},
-			{"Yellow", Color.LightYellow},
-			{"Blue", Color.LightBlue},
-			{"Red", Color.LightSalmon},
-			{"Green", Color.LightGreen}
-		};
-
-		public RulerForm() : this(RulerInfo.GetDefaultRulerInfo())
+		public RulerForm() : this(new RulerInfo())
 		{
 		}
 
@@ -81,6 +69,7 @@ namespace Ruler
 					base.Width = value;
 					_length = base.Width;
 				}
+				this.SaveInfo();
 			}
 		}
 
@@ -102,6 +91,7 @@ namespace Ruler
 					_thickness = base.Height;
 
 				}
+				this.SaveInfo();
 			}
 		}
 
@@ -116,6 +106,7 @@ namespace Ruler
 				_isVertical = value;
 				base.Width = IsVertical ? Thickness : Length;
 				base.Height = IsVertical ? Length : Thickness;
+				this.SaveInfo();
 			}
 		}
 
@@ -151,16 +142,28 @@ namespace Ruler
 			}
 		}
 
+		private bool _isLocked;
 		public bool IsLocked
 		{
-			get;
-			set;
+			get { return _isLocked; }
+			set
+			{
+				if (_isLocked == value) return;
+				_isLocked = value;
+				this.SaveInfo();
+			}
 		}
 
+		private bool _showToolTip;
 		public bool ShowToolTip
 		{
-			get;
-			set;
+			get { return _showToolTip; }
+			set
+			{
+				if (_showToolTip == value) return;
+				_showToolTip = value;
+				this.SaveInfo();
+			}
 		}
 
 		private bool _showUpTicks;
@@ -172,6 +175,7 @@ namespace Ruler
 				if (value == _showUpTicks) return;
 				_showUpTicks = value;
 				Invalidate();
+				this.SaveInfo();
 			}
 		}
 
@@ -184,6 +188,42 @@ namespace Ruler
 				if (value == _showDownTicks) return;
 				_showDownTicks = value;
 				Invalidate();
+				this.SaveInfo();
+			}
+		}
+
+		public new double Opacity
+		{
+			get { return base.Opacity; }
+			set
+			{
+				if (value == base.Opacity)
+					return;
+				base.Opacity = value;
+				this.SaveInfo();
+			}
+		}
+
+		public new bool TopMost
+		{
+			get { return base.TopMost; }
+			set
+			{
+				if (value == base.TopMost) return;
+				base.TopMost = value;
+				this.SaveInfo();
+			}
+		}
+
+		public new Color BackColor
+		{
+			get { return base.BackColor; }
+			set
+			{
+				if (value == base.BackColor)
+					return;
+				base.BackColor = value;
+				this.SaveInfo();
 			}
 		}
 
@@ -209,15 +249,6 @@ namespace Ruler
 			this.SetStyle(ControlStyles.DoubleBuffer | ControlStyles.UserPaint | ControlStyles.AllPaintingInWmPaint, true);
 		}
 
-		private RulerInfo GetRulerInfo()
-		{
-			RulerInfo rulerInfo = new RulerInfo();
-
-			this.CopyInto(rulerInfo);
-
-			return rulerInfo;
-		}
-
 		private void SetUpMenu()
 		{
 			this.AddMenuItem("Stay On Top", Shortcut.None, this.StayOnTopHandler, TopMost);
@@ -229,6 +260,7 @@ namespace Ruler
 			_lockMenuItem = this.AddMenuItem("Lock resizing", Shortcut.None, this.LockHandler, IsLocked);
 			this.AddMenuItem("Set size...", Shortcut.None, this.SetSizeHandler);
 			this.AddMenuItem("Duplicate", Shortcut.None, this.DuplicateHandler);
+			this.AddMenuItem("Reset ruler", Shortcut.None, this.ResetHandler);
 			this.AddMenuItem("-");
 			this.AddMenuItem("About...");
 			this.AddMenuItem("-");
@@ -243,14 +275,14 @@ namespace Ruler
 			}
 
 			// Add colors to color menus
-			foreach (var color in s_ColorDict)
+			foreach (var color in RulerInfo.Colors)
 			{
 				MenuItem subMenu = new MenuItem(color.Key);
 				if (color.Value == BackColor)
 				{
 					subMenu.Checked = true;
 				}
-				subMenu.Click += new EventHandler(ColorMenuHandler);
+				subMenu.Click += new EventHandler((obj, e) => ColorMenuHandler(obj, color.Value));
 				colorMenuItem.MenuItems.Add(subMenu);
 			}
 
@@ -330,10 +362,15 @@ namespace Ruler
 		{
 			lock (RulerApplicationContext.CurrentContext)
 			{
-				RulerInfo rulerInfo = this.GetRulerInfo();
-				var copy = new RulerForm(rulerInfo);
+				var copy = new RulerForm();
 				copy.Show();
 			}
+		}
+
+		private void ResetHandler(object sender, EventArgs e)
+		{
+			Properties.Settings.Default.Reset();
+			new RulerInfo().CopyInto(this);
 		}
 
 		private MenuItem AddMenuItem(string text)
@@ -438,8 +475,13 @@ namespace Ruler
 		protected override void OnResize(EventArgs e)
 		{
 			this.SetToolTip();
-
 			base.OnResize(e);
+		}
+
+		protected override void OnGotFocus(EventArgs e)
+		{
+			base.OnGotFocus(e);
+			this.SaveInfo();
 		}
 
 		private bool IsInResizableArea()
@@ -795,11 +837,11 @@ namespace Ruler
 			mi.Checked = true;
 		}
 
-		private void ColorMenuHandler(object sender, EventArgs e)
+		private void ColorMenuHandler(object sender, Color color)
 		{
 			MenuItem mi = (MenuItem)sender;
 			UncheckMenuItems(mi.Parent);
-			BackColor = s_ColorDict[mi.Text];
+			BackColor = color;
 			mi.Checked = true;
 		}
 
