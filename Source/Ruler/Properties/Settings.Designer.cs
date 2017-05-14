@@ -142,5 +142,17 @@ namespace Ruler.Properties {
                 this["ShowDownTicks"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool IsFlipped {
+            get {
+                return ((bool)(this["IsFlipped"]));
+            }
+            set {
+                this["IsFlipped"] = value;
+            }
+        }
     }
 }

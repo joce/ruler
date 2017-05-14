@@ -77,6 +77,7 @@ namespace Ruler
 
 			Func<bool, string> flagSign = b => b ? "+" : "-";
 			string defaultDownTicks = flagSign(defaultValues.ShowDownTicks) + "d";
+			string defaultFlipped = flagSign(defaultValues.IsFlipped) + "f";
 			string defaultLock = flagSign(defaultValues.IsLocked) + "l";
 			string defaultTopMost = flagSign(defaultValues.TopMost) + "m";
 			string defaultToolTop = flagSign(defaultValues.ShowToolTip) + "t";
@@ -113,6 +114,7 @@ namespace Ruler
 			sb.AppendLine("FLAGS");
 			sb.AppendLine("========");
 			sb.AppendLine("[+|-]d\t\tShow / hide down ticks (default: " + defaultDownTicks + ")");
+			sb.AppendLine("[+|-]f\t\tFlipped / unflipped the ruler (default: " + defaultFlipped + ")");
 			sb.AppendLine("[+|-]l\t\tLock / unlock the ruler (default: " + defaultLock + ")");
 			sb.AppendLine("[+|-]m\t\tMake / do not make top most (default: " + defaultTopMost + ")");
 			sb.AppendLine("[+|-]t\t\tShow / hide the tooltip (default: " + defaultToolTop + ")");
@@ -211,6 +213,9 @@ namespace Ruler
 					{
 						case 'd':
 							ret.ShowDownTicks = enable;
+							break;
+						case 'f':
+							ret.IsFlipped = enable;
 							break;
 						case 'l':
 							ret.IsLocked = enable;

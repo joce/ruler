@@ -54,6 +54,7 @@ namespace Ruler
 			ret.ShowUpTicks = isFlag("ShowUpTicks");
 			ret.ShowDownTicks = isFlag("DownTicks");
 			ret.TopMost = isFlag("TopMost");
+			ret.IsFlipped = isFlag("IsFlipped");
 
 			ret.Length = int.Parse(Properties.Settings.Default.Properties["Length"]?.DefaultValue.ToString() ?? string.Empty);
 			ret.Thickness = int.Parse(Properties.Settings.Default.Properties["Thickness"]?.DefaultValue.ToString() ?? string.Empty);
@@ -75,6 +76,7 @@ namespace Ruler
 		public Color BackColor { get; set; }
 		public bool ShowUpTicks { get; set; }
 		public bool ShowDownTicks { get; set; }
+		public bool IsFlipped { get; set; }
 
 		public RulerInfo()
 		{
@@ -90,6 +92,7 @@ namespace Ruler
 			BackColor = GetColorFromName(Properties.Settings.Default.BackColor);
 			ShowUpTicks = Properties.Settings.Default.ShowUpTicks;
 			ShowDownTicks = Properties.Settings.Default.ShowDownTicks;
+			IsFlipped = Properties.Settings.Default.IsFlipped;
 		}
 	}
 
@@ -109,6 +112,7 @@ namespace Ruler
 			targetInstance.BackColor = ruler.BackColor;
 			targetInstance.ShowUpTicks = ruler.ShowUpTicks;
 			targetInstance.ShowDownTicks = ruler.ShowDownTicks;
+			targetInstance.IsFlipped = ruler.IsFlipped;
 		}
 
 		public static void SaveInfo(this IRulerInfo ruler)
@@ -123,6 +127,7 @@ namespace Ruler
 			Properties.Settings.Default.BackColor = RulerInfo.GetNameFromColor(ruler.BackColor);
 			Properties.Settings.Default.ShowUpTicks = ruler.ShowUpTicks;
 			Properties.Settings.Default.ShowDownTicks = ruler.ShowDownTicks;
+			Properties.Settings.Default.IsFlipped = ruler.IsFlipped;
 
 			Properties.Settings.Default.Save();
 		}

@@ -36,6 +36,7 @@ namespace Ruler
 		private ContextMenu _menu = new ContextMenu();
 		private MenuItem _lockMenuItem;
 		private MenuItem _verticalMenuItem;
+		private MenuItem _flipMenuItem;
 		private DragMode _dragMode = DragMode.None;
 		private Region _lockIconRegion;
 		private static Color _TickColor = ColorTranslator.FromHtml("#3E2815");
@@ -192,6 +193,19 @@ namespace Ruler
 			}
 		}
 
+		private bool _isFlipped;
+		public bool IsFlipped
+		{
+			get { return _isFlipped; }
+			set
+			{
+				if (value == _isFlipped) return;
+				_isFlipped = value;
+				Invalidate();
+				this.SaveInfo();
+			}
+		}
+
 		public new double Opacity
 		{
 			get { return base.Opacity; }
@@ -253,6 +267,7 @@ namespace Ruler
 		{
 			this.AddMenuItem("Stay On Top", Shortcut.None, this.StayOnTopHandler, TopMost);
 			_verticalMenuItem = this.AddMenuItem("Vertical", Shortcut.None, this.VerticalHandler, IsVertical);
+			_flipMenuItem = this.AddMenuItem("Flip", Shortcut.None, this.FlipHandler, IsFlipped);
 			this.AddMenuItem("Tool Tip", Shortcut.None, this.ToolTipHandler, ShowToolTip);
 			MenuItem opacityMenuItem = this.AddMenuItem("Opacity");
 			MenuItem colorMenuItem = this.AddMenuItem("Color");
@@ -336,6 +351,13 @@ namespace Ruler
 		private void VerticalHandler(object sender, EventArgs e)
 		{
 			ChangeOrientation();
+		}
+
+		private void FlipHandler(object sender, EventArgs e)
+		{
+			this.IsFlipped = !this.IsFlipped;
+			_flipMenuItem.Checked = this.IsFlipped;
+			Invalidate();
 		}
 
 		private void LockHandler(object sender, EventArgs e)
@@ -693,10 +715,14 @@ namespace Ruler
 			for (int i = 0; i < formWidth; i+=2)
 			{
 				int tickHeight;
+				int pos = IsFlipped ? (formWidth - 1 - i) : i;
 				if (i % 100 == 0)
 				{
 					tickHeight = 15;
-					DrawTickLabel(g, i.ToString(), i, formHeight, tickHeight);
+					string label = i.ToString();
+					int labelSize = (int)g.MeasureString(label, Font).Width;
+					int labelPos = IsFlipped ? (pos - labelSize) : pos;
+					DrawTickLabel(g, label, labelPos, formHeight, tickHeight);
 				}
 				else if (i % 10 == 0)
 				{
@@ -707,7 +733,7 @@ namespace Ruler
 					tickHeight = 5;
 				}
 
-				DrawTick(g, i, formHeight, tickHeight);
+				DrawTick(g, pos, formHeight, tickHeight);
 			}
 		}
 
@@ -748,7 +774,7 @@ namespace Ruler
 		private void DrawDynamicLabelsAndIcon(Graphics g)
 		{
 			string dimensionLabelText = Width + "x" + Height + " px";
-			string cursorLabelText = GetCursorPos() + " px";
+			string cursorLabelText = (IsFlipped ? Length - 1 - GetCursorPos() : GetCursorPos()) + " px";
 			SizeF dimensionTextSize = g.MeasureString(dimensionLabelText, Font);
 
 			bool transformLockRegion = false;

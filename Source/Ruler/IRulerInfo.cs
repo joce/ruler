@@ -66,5 +66,11 @@ namespace Ruler
 			get;
 			set;
 		}
+
+		bool IsFlipped
+		{
+			get;
+			set;
+		}
 	}
 }
