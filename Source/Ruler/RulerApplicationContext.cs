@@ -17,12 +17,12 @@ namespace Ruler
 			get { return _currContext; }
 		}
 
-		public RulerApplicationContext(string[] args, string singleInstanceServiceAddress)
+		public RulerApplicationContext(RulerInfo info, string singleInstanceServiceAddress)
 		{
 			_currContext = this;
 
 			// Open the first ruler
-			var ruler = new RulerForm(RulerInfo.CovertToRulerInfo(args));
+			var ruler = new RulerForm(info);
 			ruler.Show();
 
 			// Start the listener for the single instance service

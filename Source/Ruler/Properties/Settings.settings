@@ -24,7 +24,7 @@
       <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="BackColor" Type="System.String" Scope="User">
-      <Value Profile="(Default)">White</Value>
+      <Value Profile="(Default)">white</Value>
     </Setting>
     <Setting Name="ShowUpTicks" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>

@@ -277,7 +277,12 @@ namespace Ruler
 			// Add colors to color menus
 			foreach (var color in RulerInfo.Colors)
 			{
-				MenuItem subMenu = new MenuItem(color.Key);
+				// Capitalize
+				char[] a = color.Key.ToCharArray();
+				a[0] = char.ToUpper(a[0]);
+				var name = new string(a);
+
+				MenuItem subMenu = new MenuItem(name);
 				if (color.Value == BackColor)
 				{
 					subMenu.Checked = true;

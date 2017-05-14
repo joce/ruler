@@ -109,7 +109,7 @@ namespace Ruler.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("White")]
+        [global::System.Configuration.DefaultSettingValueAttribute("white")]
         public string BackColor {
             get {
                 return ((string)(this["BackColor"]));

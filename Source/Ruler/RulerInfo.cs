@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -8,11 +9,11 @@ namespace Ruler
 	{
 		private static readonly Dictionary<string, Color> s_ColorDict = new Dictionary<string, Color>
 		{
-			{"White", Color.White},
-			{"Yellow", Color.LightYellow},
-			{"Blue", Color.LightBlue},
-			{"Red", Color.LightSalmon},
-			{"Green", Color.LightGreen}
+			{"white", Color.White},
+			{"yellow", Color.LightYellow},
+			{"blue", Color.LightBlue},
+			{"red", Color.LightSalmon},
+			{"green", Color.LightGreen}
 		};
 
 		public static IDictionary<string, Color> Colors
@@ -40,65 +41,40 @@ namespace Ruler
 			return ret.Value;
 		}
 
-		public int Length
+		public static RulerInfo GetDefaultRulerInfo()
 		{
-			get;
-			set;
+			RulerInfo ret = new RulerInfo();
+
+			Func<string, bool> isFlag =
+				flagName =>
+					(Properties.Settings.Default.Properties[flagName]?.DefaultValue.ToString() == "True");
+			ret.IsVertical = isFlag("IsVertical");
+			ret.IsLocked = isFlag("IsLocked");
+			ret.ShowToolTip = isFlag("ShowToolTip");
+			ret.ShowUpTicks = isFlag("ShowUpTicks");
+			ret.ShowDownTicks = isFlag("DownTicks");
+			ret.TopMost = isFlag("TopMost");
+
+			ret.Length = int.Parse(Properties.Settings.Default.Properties["Length"]?.DefaultValue.ToString() ?? string.Empty);
+			ret.Thickness = int.Parse(Properties.Settings.Default.Properties["Thickness"]?.DefaultValue.ToString() ?? string.Empty);
+			ret.Opacity = double.Parse(Properties.Settings.Default.Properties["Opacity"]?.DefaultValue.ToString() ?? string.Empty);
+
+			string defaultColor = Properties.Settings.Default.Properties["BackColor"]?.DefaultValue.ToString() ?? string.Empty;
+			ret.BackColor = Colors.ContainsKey(defaultColor) ? Colors[defaultColor] : Color.White;
+
+			return ret;
 		}
 
-		public int Thickness
-		{
-			get;
-			set;
-		}
-
-		public bool IsVertical
-		{
-			get;
-			set;
-		}
-
-		public double Opacity
-		{
-			get;
-			set;
-		}
-
-		public bool ShowToolTip
-		{
-			get;
-			set;
-		}
-
-		public bool IsLocked
-		{
-			get;
-			set;
-		}
-
-		public bool TopMost
-		{
-			get;
-			set;
-		}
-
-		public Color BackColor
-		{
-			get;
-			set;
-		}
-
-		public bool ShowUpTicks
-		{
-			get;
-			set;
-		}
-
-		public bool ShowDownTicks
-		{
-			get;
-			set;
-		}
+		public int Length { get; set; }
+		public int Thickness { get; set; }
+		public bool IsVertical { get; set; }
+		public double Opacity { get; set; }
+		public bool ShowToolTip { get; set; }
+		public bool IsLocked { get; set; }
+		public bool TopMost { get; set; }
+		public Color BackColor { get; set; }
+		public bool ShowUpTicks { get; set; }
+		public bool ShowDownTicks { get; set; }
 
 		public RulerInfo()
 		{
@@ -114,48 +90,6 @@ namespace Ruler
 			BackColor = GetColorFromName(Properties.Settings.Default.BackColor);
 			ShowUpTicks = Properties.Settings.Default.ShowUpTicks;
 			ShowDownTicks = Properties.Settings.Default.ShowDownTicks;
-		}
-
-		public string ConvertToParameters()
-		{
-			return string.Format("{0} {1} {2} {3} {4} {5} {6} {7} {8} {9}", this.Length, this.Thickness, this.IsVertical, this.Opacity, this.ShowToolTip, this.IsLocked, this.TopMost, this.BackColor.Name, this.ShowUpTicks, this.ShowDownTicks);
-		}
-
-		public static RulerInfo CovertToRulerInfo(string[] args)
-		{
-			if (args.Length != 10)
-			{
-				// We need better handling of start arguments
-				return new RulerInfo();
-			}
-
-			string width = args[0];
-			string height = args[1];
-			string isVertical = args[2];
-			string opacity = args[3];
-			string showToolTip = args[4];
-			string isLocked = args[5];
-			string topMost = args[6];
-			string backColor = args[7];
-			string showUpTicks = args[8];
-			string showDownTicks = args[9];
-
-			RulerInfo rulerInfo = new RulerInfo();
-
-			// IsVertical needs to be set first to ensure the min size are properly set
-			// before Length and Thickness are set.
-			rulerInfo.IsVertical = bool.Parse(isVertical);
-			rulerInfo.Length = int.Parse(width);
-			rulerInfo.Thickness = int.Parse(height);
-			rulerInfo.Opacity = double.Parse(opacity);
-			rulerInfo.ShowToolTip = bool.Parse(showToolTip);
-			rulerInfo.IsLocked = bool.Parse(isLocked);
-			rulerInfo.TopMost = bool.Parse(topMost);
-			rulerInfo.BackColor = GetColorFromName(backColor);
-			rulerInfo.ShowUpTicks = bool.Parse(showUpTicks);
-			rulerInfo.ShowDownTicks = bool.Parse(showDownTicks);
-
-			return rulerInfo;
 		}
 	}
 
