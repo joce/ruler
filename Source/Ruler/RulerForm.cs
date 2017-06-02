@@ -739,7 +739,8 @@ namespace Ruler
 
 		private Point GetDimensionLabelPos(SizeF dimensionTextSize, bool useVertical)
 		{
-			const int distanceToBorder = 15;
+			int textDimensionToUse = (int)(useVertical ? dimensionTextSize.Height * 2 : dimensionTextSize.Width);
+			int distanceToBorder = IsFlipped ? Length - (textDimensionToUse + 15) : 15;
 			if (useVertical)
 			{
 				if (!ShowDownTicks)
