@@ -775,7 +775,7 @@ namespace Ruler
 		private void DrawDynamicLabelsAndIcon(Graphics g)
 		{
 			string dimensionLabelText = Width + "x" + Height + " px";
-			string cursorLabelText = (IsFlipped ? Length - 1 - GetCursorPos() : GetCursorPos()) + " px";
+			string cursorLabelText = (IsFlipped ? Length - GetCursorPos() : GetCursorPos()) + " px";
 			SizeF dimensionTextSize = g.MeasureString(dimensionLabelText, Font);
 
 			bool transformLockRegion = false;
