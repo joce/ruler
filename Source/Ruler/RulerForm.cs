@@ -752,29 +752,37 @@ namespace Ruler
 		private Point GetDimensionLabelPos(SizeF dimensionTextSize, bool useVertical)
 		{
 			int textDimensionToUse = (int)(useVertical ? dimensionTextSize.Height * 2 : dimensionTextSize.Width);
-			int distanceToBorder = IsFlipped ? Length - (textDimensionToUse + 30) : 15;
+			const int distanceToBorder = 15;
 			if (useVertical)
 			{
+				int yPlacement = distanceToBorder;
+				if (IsFlipped)
+					yPlacement = Length - (textDimensionToUse + distanceToBorder);
+
 				if (!ShowDownTicks)
-					return new Point(distanceToBorder, distanceToBorder);
+					return new Point(distanceToBorder, yPlacement);
 
 				if (!ShowUpTicks)
-					return new Point(Width-(int)dimensionTextSize.Width - distanceToBorder, distanceToBorder);
+					return new Point(Width-(int)dimensionTextSize.Width - 2*distanceToBorder, yPlacement);
 
-				return new Point((Width - (int)dimensionTextSize.Width - 16)/2, distanceToBorder);
+				return new Point((Width - (int)dimensionTextSize.Width - distanceToBorder)/2, yPlacement);
 			}
 
+			int xPlacement = distanceToBorder;
+			if (IsFlipped)
+				xPlacement = Length - (textDimensionToUse + 2 * distanceToBorder);
+
 			// For very slim rulers, center the labels in height
-			if ((Thickness - (Font.Height * 2)) <= (distanceToBorder * 2))
-				return new Point(distanceToBorder, (Thickness / 2)- Font.Height);
+			if ((Thickness - (Font.Height * 2)) <= 2 * distanceToBorder)
+				return new Point(xPlacement, (Thickness / 2)- Font.Height);
 
 			if (!ShowDownTicks)
-				return new Point(distanceToBorder, Thickness - (Font.Height * 2 + distanceToBorder));
+				return new Point(xPlacement, Thickness - (Font.Height * 2 + distanceToBorder));
 
 			if (!ShowUpTicks)
-				return new Point(distanceToBorder, distanceToBorder);
+				return new Point(xPlacement, distanceToBorder);
 
-			return new Point(distanceToBorder, (Thickness / 2)- Font.Height);
+			return new Point(xPlacement, (Thickness / 2)- Font.Height);
 		}
 
 		private int GetCursorPos()
