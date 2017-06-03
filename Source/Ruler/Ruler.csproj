@@ -143,6 +143,8 @@
     <Compile Include="RulerForm.cs">
       <SubType>Form</SubType>
     </Compile>
+    <None Include="Resources\FlipIcon.ico" />
+    <None Include="Resources\FlipVertIcon.ico" />
     <EmbeddedResource Include="RulerForm.resx">
       <DependentUpon>RulerForm.cs</DependentUpon>
       <SubType>Designer</SubType>

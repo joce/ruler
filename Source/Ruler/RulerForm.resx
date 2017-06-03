@@ -120,40 +120,52 @@
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="UnlockIcon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
-      AAABAAEAEBAAAAAAIABoBAAAFgAAACgAAAAQAAAAIAAAAAEAIAAAAAAAQAQAAAAAAAAAAAAAAAAAAAAAAAD///8B////Af///wH///8B////Af///wH///8B////Af///wH///8B////Af///wH///8B////Af///wH///8B////Af///wH///8B////Af///wH///8B////Af///wH///8B////Af///wH///8B////Af///wH///8B////Af///wH///8BAAAAEQAAAJcAAAC3AAAAtwAAALcAAAC3AAAAtwAAALcAAAC3AAAAtwAAAJcAAAAR////Af///wH///8B////AQAAACUAAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAAJf///wH///8B////Af///wEAAAAlAAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAACX///8B////Af///wH///8BAAAAJQAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAAl////Af///wH///8B////AQAAACUAAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAAJf///wH///8B////Af///wEAAAAlAAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAACX///8B////Af///wH///8BAAAAHQAAAOcAAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAOcAAAAd////Af///wH///8B////AQAAAAMAAAAdAAAA/wAAAMEAAAAlAAAAJQAAACUAAAAlAAAAJQAAACUAAAAdAAAAA////wH///8B////Af///wH///8B////AQAAAP8AAAC3////Af///wH///8B////Af///wH///8B////Af///wH///8B////Af///wH///8B////Af///wEAAAD/AAAAt////wH///8B////Af///wEAAABZAAAAg////wH///8B////Af///wH///8B////Af///wH///8BAAAA6wAAAMMAAAAN////Af///wEAAAANAAAAwwAAAOv///8B////Af///wH///8B////Af///wH///8B////AQAAAKEAAADxAAAAawAAAA0AAAANAAAAawAAAPEAAACh////Af///wH///8B////Af///wH///8B////Af///wEAAAAvAAAA2QAAAPEAAADDAAAAwwAAAPEAAADZAAAAL////wH///8B////Af///wH///8B////Af///wH///8B////AQAAAC8AAACfAAAA6wAAAOsAAACfAAAAL////wH///8B////Af///wH///8BAAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA//8AAP//AAD//w==
-    </value>
+        AAABAAEAEBAAAAAAIABoBAAAFgAAACgAAAAQAAAAIAAAAAEAIAAAAAAAQAQAAAAAAAAAAAAAAAAAAAAA
+        AAD///8B////Af///wH///8B////Af///wH///8B////Af///wH///8B////Af///wH///8B////Af//
+        /wH///8B////Af///wH///8B////Af///wH///8B////Af///wH///8B////Af///wH///8B////Af//
+        /wH///8B////Af///wH///8BAAAAEQAAAJcAAAC3AAAAtwAAALcAAAC3AAAAtwAAALcAAAC3AAAAtwAA
+        AJcAAAAR////Af///wH///8B////AQAAACUAAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAA
+        AP8AAAD/AAAAJf///wH///8B////Af///wEAAAAlAAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAA
+        AP8AAAD/AAAA/wAAACX///8B////Af///wH///8BAAAAJQAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAA
+        AP8AAAD/AAAA/wAAAP8AAAAl////Af///wH///8B////AQAAACUAAAD/AAAA/wAAAP8AAAD/AAAA/wAA
+        AP8AAAD/AAAA/wAAAP8AAAD/AAAAJf///wH///8B////Af///wEAAAAlAAAA/wAAAP8AAAD/AAAA/wAA
+        AP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAACX///8B////Af///wH///8BAAAAHQAAAOcAAAD/AAAA/wAA
+        AP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAOcAAAAd////Af///wH///8B////AQAAAAMAAAAdAAAA/wAA
+        AMEAAAAlAAAAJQAAACUAAAAlAAAAJQAAACUAAAAdAAAAA////wH///8B////Af///wH///8B////AQAA
+        AP8AAAC3////Af///wH///8B////Af///wH///8B////Af///wH///8B////Af///wH///8B////Af//
+        /wEAAAD/AAAAt////wH///8B////Af///wEAAABZAAAAg////wH///8B////Af///wH///8B////Af//
+        /wH///8BAAAA6wAAAMMAAAAN////Af///wEAAAANAAAAwwAAAOv///8B////Af///wH///8B////Af//
+        /wH///8B////AQAAAKEAAADxAAAAawAAAA0AAAANAAAAawAAAPEAAACh////Af///wH///8B////Af//
+        /wH///8B////Af///wEAAAAvAAAA2QAAAPEAAADDAAAAwwAAAPEAAADZAAAAL////wH///8B////Af//
+        /wH///8B////Af///wH///8B////AQAAAC8AAACfAAAA6wAAAOsAAACfAAAAL////wH///8B////Af//
+        /wH///8BAAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA
+        //8AAP//AAD//w==
+</value>
     <comment>The unlock Icon</comment>
   </data>
   <data name="LockIcon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
-      AAABAAEAEBAAAAAAIABoBAAAFgAAACgAAAAQAAAAIAAAAAEAIAAAAAAAQAQAAAAAAAAAAAAAAAAAAAAAAAD///8B////Af///wH///8B////Af///wH///8B////Af///wH///8B////Af///wH///8B////Af///wH///8B////Af///wH///8B////Af///wH///8B////Af///wH///8B////Af///wH///8B////Af///wH///8B////Af///wH///8BAAAAEQAAAJcAAAC3AAAAtwAAALcAAAC3AAAAtwAAALcAAAC3AAAAtwAAAJcAAAAR////Af///wH///8B////AQAAACUAAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAAJf///wH///8B////Af///wEAAAAlAAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAACX///8B////Af///wH///8BAAAAJQAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAAl////Af///wH///8B////AQAAACUAAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAAJf///wH///8B////Af///wEAAAAlAAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAACX///8B////Af///wH///8BAAAAHQAAAOcAAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAOcAAAAd////Af///wH///8B////AQAAAAMAAAAdAAAA/wAAAMEAAAAlAAAAJQAAACUAAAAlAAAAwQAAAP8AAAAdAAAAA////wH///8B////Af///wH///8B////AQAAAP0AAAC3////Af///wH///8B////AQAAALcAAAD9////Af///wH///8B////Af///wH///8B////Af///wEAAADnAAAAxQAAABH///8B////AQAAABEAAADFAAAA5////wH///8B////Af///wH///8B////Af///wH///8BAAAAkQAAAPkAAACFAAAAEwAAABMAAACFAAAA+QAAAJH///8B////Af///wH///8B////Af///wH///8B////AQAAAB8AAADDAAAA9wAAAOEAAADhAAAA9wAAAMMAAAAf////Af///wH///8B////Af///wH///8B////Af///wH///8BAAAAIQAAAH0AAADFAAAAxQAAAH0AAAAh////Af///wH///8B////Af///wH///8B////Af///wH///8B////Af///wH///8B////Af///wH///8B////Af///wH///8B////Af///wH///8BAAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA//8AAP//AAD//w==
-    </value>
-    <comment>The Lock Icon</comment>
-  </data>
-  <data name="RotateIcon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-    <value>
-      AAABAAEAEBAAAAAAIABoBAAAFgAAACgAAAAQAAAAIAAAAAEAIAAAAAAAQAQAAAAAAAAAAAAAAAAA
-      AAAAAAD///8B////Af///wH///8B////Af///wH///8B////Af///wH///8B////Af///wH///8B
-      ////Af///wH///8B////Af///wH///8B////Af///wH///8B////Af///wH///8B////Af///wH/
-      //8B////Af///wH///8B////Af///wH///8B////Af///wH///8B////AQAAABEAAAARAAAAEQAA
-      ABH///8B////Af///wH///8B////Af///wH///8B////Af///wH///8BAAAAEQAAAKEAAAD/AAAA
-      QQAAAEEAAAD/AAAAsQAAABH///8B////Af///wH///8B////Af///wH///8BAAAAEQAAANEAAADf
-      AAAAXwAAABEAAAARAAAATwAAAI////8BAAAAEf///wH///8B////Af///wH///8B////AQAAAKEA
-      AADfAAAAEf///wH///8B////Af///wH///8BAAAAkQAAAKH///8B////Af///wH///8B////AQAA
-      ABEAAAD/AAAAYf///wH///8B////Af///wH///8B////AQAAAFEAAAD/AAAAEf///wH///8B////
-      Af///wEAAABBAAAA/wAAABH///8B////Af///wH///8B////Af///wEAAAARAAAAPwAAABH///8B
-      ////Af///wH///8BAAAAQQAAAP8AAAAR////Af///wH///8B////Af///wH///8BAAAAEQAAAEEA
-      AAAR////Af///wH///8B////AQAAABEAAAD/AAAAYf///wH///8BAAAAUf///wH///8B////AQAA
-      AFEAAAD/AAAAEf///wH///8B////Af///wH///8BAAAAoQAAAOEAAAAR////AQAAAMEAAACh////
-      Af///wEAAACRAAAAof///wH///8B////Af///wH///8B////AQAAABEAAADPAAAA4QAAAGEAAADR
-      AAAA/wAAAKH///8B////AQAAABH///8B////Af///wH///8B////Af///wH///8BAAAAEQAAAJ8A
-      AAD/AAAA/wAAAP8AAADvAAAAIf///wH///8B////Af///wH///8B////Af///wH///8B////Af//
-      /wH///8BAAAAEQAAAM8AAADvAAAAMf///wH///8B////Af///wH///8B////Af///wH///8B////
-      Af///wH///8B////Af///wEAAACxAAAAMf///wH///8B////Af///wH///8B////Af///wH///8B
-      ////Af///wH///8B////Af///wH///8BAAAAEf///wH///8B////Af///wH///8B////Af///wH/
-      //8BAAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA
-      //8AAP//AAD//w==
-    </value>
+        AAABAAEAEBAAAAAAIABoBAAAFgAAACgAAAAQAAAAIAAAAAEAIAAAAAAAQAQAAAAAAAAAAAAAAAAAAAAA
+        AAD///8B////Af///wH///8B////Af///wH///8B////Af///wH///8B////Af///wH///8B////Af//
+        /wH///8B////Af///wH///8B////Af///wH///8B////Af///wH///8B////Af///wH///8B////Af//
+        /wH///8B////Af///wH///8BAAAAEQAAAJcAAAC3AAAAtwAAALcAAAC3AAAAtwAAALcAAAC3AAAAtwAA
+        AJcAAAAR////Af///wH///8B////AQAAACUAAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAA
+        AP8AAAD/AAAAJf///wH///8B////Af///wEAAAAlAAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAA
+        AP8AAAD/AAAA/wAAACX///8B////Af///wH///8BAAAAJQAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAA
+        AP8AAAD/AAAA/wAAAP8AAAAl////Af///wH///8B////AQAAACUAAAD/AAAA/wAAAP8AAAD/AAAA/wAA
+        AP8AAAD/AAAA/wAAAP8AAAD/AAAAJf///wH///8B////Af///wEAAAAlAAAA/wAAAP8AAAD/AAAA/wAA
+        AP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAACX///8B////Af///wH///8BAAAAHQAAAOcAAAD/AAAA/wAA
+        AP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAOcAAAAd////Af///wH///8B////AQAAAAMAAAAdAAAA/wAA
+        AMEAAAAlAAAAJQAAACUAAAAlAAAAwQAAAP8AAAAdAAAAA////wH///8B////Af///wH///8B////AQAA
+        AP0AAAC3////Af///wH///8B////AQAAALcAAAD9////Af///wH///8B////Af///wH///8B////Af//
+        /wEAAADnAAAAxQAAABH///8B////AQAAABEAAADFAAAA5////wH///8B////Af///wH///8B////Af//
+        /wH///8BAAAAkQAAAPkAAACFAAAAEwAAABMAAACFAAAA+QAAAJH///8B////Af///wH///8B////Af//
+        /wH///8B////AQAAAB8AAADDAAAA9wAAAOEAAADhAAAA9wAAAMMAAAAf////Af///wH///8B////Af//
+        /wH///8B////Af///wH///8BAAAAIQAAAH0AAADFAAAAxQAAAH0AAAAh////Af///wH///8B////Af//
+        /wH///8B////Af///wH///8B////Af///wH///8B////Af///wH///8B////Af///wH///8B////Af//
+        /wH///8BAAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA
+        //8AAP//AAD//w==
+</value>
     <comment>The Lock Icon</comment>
   </data>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
@@ -1821,5 +1833,12 @@
         AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
         AAAAAAAAAAAAAAAAAAAAAAAA
 </value>
+  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="FlipIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>resources\flipicon.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="FlipVertIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\FlipVertIcon.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

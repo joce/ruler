@@ -39,6 +39,7 @@ namespace Ruler
 		private MenuItem _flipMenuItem;
 		private DragMode _dragMode = DragMode.None;
 		private Region _lockIconRegion;
+		private Region _flipIconRegion;
 		private static Color _TickColor = ColorTranslator.FromHtml("#3E2815");
 		private static Color _CursorColor = Color.FromArgb(200, _TickColor);
 
@@ -434,7 +435,8 @@ namespace Ruler
 
 		protected override void OnDoubleClick(EventArgs e)
 		{
-			if (_lockIconRegion.IsVisible(PointToClient(MousePosition)))
+			if (_lockIconRegion.IsVisible(PointToClient(MousePosition)) ||
+				_flipIconRegion.IsVisible(PointToClient(MousePosition)))
 				return;
 
 			ChangeOrientation();
@@ -461,6 +463,10 @@ namespace Ruler
 			if (_lockIconRegion.IsVisible(e.Location))
 			{
 				LockHandler(this, e);
+			}
+			else if (_flipIconRegion.IsVisible(e.Location))
+			{
+				FlipHandler(this, e);
 			}
 
 			_dragMode = DragMode.None;
@@ -740,7 +746,7 @@ namespace Ruler
 		private Point GetDimensionLabelPos(SizeF dimensionTextSize, bool useVertical)
 		{
 			int textDimensionToUse = (int)(useVertical ? dimensionTextSize.Height * 2 : dimensionTextSize.Width);
-			int distanceToBorder = IsFlipped ? Length - (textDimensionToUse + 15) : 15;
+			int distanceToBorder = IsFlipped ? Length - (textDimensionToUse + 30) : 15;
 			if (useVertical)
 			{
 				if (!ShowDownTicks)
@@ -749,7 +755,7 @@ namespace Ruler
 				if (!ShowUpTicks)
 					return new Point(Width-(int)dimensionTextSize.Width - distanceToBorder, distanceToBorder);
 
-				return new Point((Width - (int)dimensionTextSize.Width)/2, distanceToBorder);
+				return new Point((Width - (int)dimensionTextSize.Width - 16)/2, distanceToBorder);
 			}
 
 			// For very slim rulers, center the labels in height
@@ -798,19 +804,31 @@ namespace Ruler
 			g.DrawString(dimensionLabelText, Font, new SolidBrush(_TickColor), taX, taY);
 			g.DrawString(cursorLabelText, Font, new SolidBrush(_CursorColor), tbX, tbY);
 
-			DrawIcon(g, taX + (int)dimensionTextSize.Width, tbY, transformLockRegion);
+			DrawFlipIcon(g, taX + (int)dimensionTextSize.Width, taY, transformLockRegion);
+			DrawLockIcon(g, taX + (int)dimensionTextSize.Width, tbY, transformLockRegion);
 		}
 
-		private Point GetIconPos(Bitmap icon, int leftPos, int bottomPos)
+		private void DrawFlipIcon(Graphics g, int leftPos, int bottomPos, bool transformLockRegion)
 		{
-			return new Point(leftPos - icon.Width - 1, bottomPos+2);
+			// Lock Icon
+			Bitmap lockIcon = (IsVertical && !transformLockRegion ? GetIcon("FlipVertIcon") : GetIcon("FlipIcon")).ToBitmap();
+			Point lockIconPoint = new Point(leftPos, bottomPos);
+			Point lockRegionPt = lockIconPoint;
+			if (transformLockRegion)
+			{
+				lockRegionPt = new Point(Width - lockIconPoint.Y - lockIcon.Height, lockIconPoint.X);
+			}
+			// Keep a reference of the region where the icon is to detect a click on it
+			_flipIconRegion = new Region(new Rectangle(lockRegionPt, lockIcon.Size));
+
+			g.DrawImage(lockIcon, lockIconPoint.X, lockIconPoint.Y);
 		}
 
-		private void DrawIcon(Graphics g, int leftPos, int bottomPos, bool transformLockRegion)
+		private void DrawLockIcon(Graphics g, int leftPos, int bottomPos, bool transformLockRegion)
 		{
 			// Lock Icon
 			Bitmap lockIcon = (IsLocked ? GetIcon("LockIcon") : GetIcon("UnlockIcon")).ToBitmap();
-			Point lockIconPoint = GetIconPos(lockIcon, leftPos, bottomPos);
+			Point lockIconPoint = new Point(leftPos, bottomPos);
 			Point lockRegionPt = lockIconPoint;
 			if (transformLockRegion)
 			{
