@@ -114,7 +114,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Dimension.cs" />
-    <Compile Include="ExtensionSupport.cs" />
     <Compile Include="IRulerInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
