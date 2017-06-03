@@ -356,8 +356,7 @@ namespace Ruler
 
 		private void FlipHandler(object sender, EventArgs e)
 		{
-			this.IsFlipped = !this.IsFlipped;
-			_flipMenuItem.Checked = this.IsFlipped;
+			ChangeDirection();
 			Invalidate();
 		}
 
@@ -439,7 +438,14 @@ namespace Ruler
 				_flipIconRegion.IsVisible(PointToClient(MousePosition)))
 				return;
 
-			ChangeOrientation();
+			if ((ModifierKeys & Keys.Control) == Keys.Control)
+			{
+				ChangeDirection();
+			}
+			else
+			{
+				ChangeOrientation();
+			}
 			base.OnDoubleClick(e);
 		}
 
@@ -920,6 +926,12 @@ namespace Ruler
 		{
 			this.IsVertical = !IsVertical;
 			_verticalMenuItem.Checked = IsVertical;
+		}
+
+		private void ChangeDirection()
+		{
+			this.IsFlipped = !IsFlipped;
+			_flipMenuItem.Checked = IsFlipped;
 		}
 
 		private void InitializeComponent()
