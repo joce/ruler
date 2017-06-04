@@ -28,6 +28,7 @@ namespace Ruler
         /// </summary>
         private void InitializeComponent()
         {
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AboutForm));
 			this.richTextBox = new System.Windows.Forms.RichTextBox();
 			this.panel1 = new System.Windows.Forms.Panel();
 			this.button1 = new System.Windows.Forms.Button();
@@ -43,13 +44,14 @@ namespace Ruler
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.richTextBox.BackColor = System.Drawing.SystemColors.Window;
 			this.richTextBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
-			this.richTextBox.Location = new System.Drawing.Point(70, 34);
+			this.richTextBox.Cursor = System.Windows.Forms.Cursors.Default;
+			this.richTextBox.Location = new System.Drawing.Point(62, 22);
 			this.richTextBox.Name = "richTextBox";
 			this.richTextBox.ReadOnly = true;
-			this.richTextBox.Size = new System.Drawing.Size(252, 92);
+			this.richTextBox.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
+			this.richTextBox.Size = new System.Drawing.Size(231, 122);
 			this.richTextBox.TabIndex = 3;
-			this.richTextBox.Text = "Ruler-mod {VERSION}\nhttps://github.com/Ishmaeel/ruler\n\nOriginal Ruler v1.4.0.0 by" +
-    " Jeff Key\nwww.sliver.com\nIcon by Kristen Magee @ www.kbecca.com";
+			this.richTextBox.Text = resources.GetString("richTextBox.Text");
 			this.richTextBox.LinkClicked += new System.Windows.Forms.LinkClickedEventHandler(this.RichTextBox_LinkClicked);
 			this.richTextBox.Enter += new System.EventHandler(this.RichTextBox_Enter);
 			// 
@@ -60,14 +62,14 @@ namespace Ruler
 			this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
 			this.panel1.Location = new System.Drawing.Point(0, 150);
 			this.panel1.Name = "panel1";
-			this.panel1.Size = new System.Drawing.Size(334, 48);
+			this.panel1.Size = new System.Drawing.Size(305, 48);
 			this.panel1.TabIndex = 4;
 			// 
 			// button1
 			// 
 			this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.button1.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.button1.Location = new System.Drawing.Point(247, 13);
+			this.button1.Location = new System.Drawing.Point(218, 13);
 			this.button1.Name = "button1";
 			this.button1.Size = new System.Drawing.Size(75, 23);
 			this.button1.TabIndex = 0;
@@ -76,7 +78,7 @@ namespace Ruler
 			// 
 			// pictureBox
 			// 
-			this.pictureBox.Location = new System.Drawing.Point(29, 34);
+			this.pictureBox.Location = new System.Drawing.Point(12, 12);
 			this.pictureBox.Name = "pictureBox";
 			this.pictureBox.Size = new System.Drawing.Size(32, 32);
 			this.pictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
@@ -90,7 +92,7 @@ namespace Ruler
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.BackColor = System.Drawing.SystemColors.Window;
 			this.CancelButton = this.button1;
-			this.ClientSize = new System.Drawing.Size(334, 198);
+			this.ClientSize = new System.Drawing.Size(305, 198);
 			this.Controls.Add(this.richTextBox);
 			this.Controls.Add(this.pictureBox);
 			this.Controls.Add(this.panel1);

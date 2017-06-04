@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 #pragma warning disable
-[assembly: AssemblyFileVersion("1.4.0.0 - R2")]
+[assembly: AssemblyFileVersion("2.0.0.0 b1")]
 #pragma warning restore
 
 //
@@ -11,12 +11,12 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 //
-[assembly: AssemblyTitle("Ruler-mod")]
-[assembly: AssemblyDescription("It's still a ruler!")]
+[assembly: AssemblyTitle("Ruler")]
+[assembly: AssemblyDescription("It's a ruler!")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Jeff Key")]
 [assembly: AssemblyProduct("Ruler")]
-[assembly: AssemblyCopyright("Copyright � 2004-7, Jeff Key")]
+[assembly: AssemblyCopyright("Copyright © 2004-7, Jeff Key")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]		
 
