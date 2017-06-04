@@ -49,7 +49,7 @@ namespace Ruler.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("126")]
+        [global::System.Configuration.DefaultSettingValueAttribute("100")]
         public int Thickness {
             get {
                 return ((int)(this["Thickness"]));
@@ -61,7 +61,7 @@ namespace Ruler.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0.6")]
+        [global::System.Configuration.DefaultSettingValueAttribute("0.7")]
         public double Opacity {
             get {
                 return ((double)(this["Opacity"]));
@@ -133,7 +133,7 @@ namespace Ruler.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
         public bool ShowDownTicks {
             get {
                 return ((bool)(this["ShowDownTicks"]));

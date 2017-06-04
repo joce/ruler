@@ -9,10 +9,10 @@
       <Value Profile="(Default)">500</Value>
     </Setting>
     <Setting Name="Thickness" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">126</Value>
+      <Value Profile="(Default)">100</Value>
     </Setting>
     <Setting Name="Opacity" Type="System.Double" Scope="User">
-      <Value Profile="(Default)">0.6</Value>
+      <Value Profile="(Default)">0.7</Value>
     </Setting>
     <Setting Name="ShowToolTip" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
@@ -30,7 +30,7 @@
       <Value Profile="(Default)">True</Value>
     </Setting>
     <Setting Name="ShowDownTicks" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">False</Value>
+      <Value Profile="(Default)">True</Value>
     </Setting>
     <Setting Name="IsFlipped" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
