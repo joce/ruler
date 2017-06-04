@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Resources;
 using System.Windows.Forms;
@@ -34,9 +35,16 @@ namespace Ruler
 		private Point _mouseDownPoint;
 		private ResizeRegion _resizeRegion = ResizeRegion.None;
 		private ContextMenu _menu = new ContextMenu();
+		private MenuItem _topmostMenuItem;
 		private MenuItem _lockMenuItem;
 		private MenuItem _verticalMenuItem;
 		private MenuItem _flipMenuItem;
+		private MenuItem _tooltipMenuItem;
+		private MenuItem _opacityParentMenuItem;
+		private MenuItem _colorParentMenuItem;
+		private MenuItem _upTicksMenuItem;
+		private MenuItem _downTicksMenuItem;
+		private Dictionary<Color, MenuItem> _colorMenuItems = new Dictionary<Color, MenuItem>();
 		private DragMode _dragMode = DragMode.None;
 		private Region _lockIconRegion;
 		private Region _flipIconRegion;
@@ -266,28 +274,28 @@ namespace Ruler
 
 		private void SetUpMenu()
 		{
-			this.AddMenuItem("Stay On Top", Shortcut.None, this.StayOnTopHandler, TopMost);
-			_verticalMenuItem = this.AddMenuItem("Vertical", Shortcut.None, this.VerticalHandler, IsVertical);
-			_flipMenuItem = this.AddMenuItem("Flip", Shortcut.None, this.FlipHandler, IsFlipped);
-			this.AddMenuItem("Tool Tip", Shortcut.None, this.ToolTipHandler, ShowToolTip);
-			MenuItem opacityMenuItem = this.AddMenuItem("Opacity");
-			MenuItem colorMenuItem = this.AddMenuItem("Color");
-			MenuItem ticksMenuItem = this.AddMenuItem("Ticks");
-			_lockMenuItem = this.AddMenuItem("Lock resizing", Shortcut.None, this.LockHandler, IsLocked);
-			this.AddMenuItem("Set size...", Shortcut.None, this.SetSizeHandler);
-			this.AddMenuItem("Duplicate", Shortcut.None, this.DuplicateHandler);
-			this.AddMenuItem("Reset ruler", Shortcut.None, this.ResetHandler);
-			this.AddMenuItem("-");
-			this.AddMenuItem("About...");
-			this.AddMenuItem("-");
-			this.AddMenuItem("Close");
+			_topmostMenuItem = AddMenuItem("Stay On Top", Shortcut.None, (s, e) => ChangeStayOnTop(), TopMost);
+			_verticalMenuItem = AddMenuItem("Vertical", Shortcut.None, (s, e) => ChangeOrientation(), IsVertical);
+			_flipMenuItem = AddMenuItem("Flip", Shortcut.None, (s, e) => ChangeDirection(), IsFlipped);
+			_lockMenuItem = AddMenuItem("Lock resizing", Shortcut.None, (s, e) => ChangeLock(), IsLocked);
+			_tooltipMenuItem = AddMenuItem("Tool Tip", Shortcut.None, (s, e) => ChangeShowTooltip(), ShowToolTip);
+			_opacityParentMenuItem = AddMenuItem("Opacity");
+			_colorParentMenuItem = AddMenuItem("Color");
+			MenuItem ticksMenuItem = AddMenuItem("Ticks");
+			AddMenuItem("Set size...", Shortcut.None, SetSizeHandler);
+			AddMenuItem("Duplicate", Shortcut.None, DuplicateHandler);
+			AddMenuItem("Reset ruler", Shortcut.None, ResetHandler);
+			AddMenuItem("-");
+			AddMenuItem("About...");
+			AddMenuItem("-");
+			AddMenuItem("Close");
 
 			for (int i = 10; i <= 100; i += 10)
 			{
 				MenuItem subMenu = new MenuItem(i + "%");
 				subMenu.Checked = (i == Opacity * 100);
-				subMenu.Click += new EventHandler(OpacityMenuHandler);
-				opacityMenuItem.MenuItems.Add(subMenu);
+				subMenu.Click += OpacityMenuHandler;
+				_opacityParentMenuItem.MenuItems.Add(subMenu);
 			}
 
 			// Add colors to color menus
@@ -303,20 +311,22 @@ namespace Ruler
 				{
 					subMenu.Checked = true;
 				}
-				subMenu.Click += new EventHandler((obj, e) => ColorMenuHandler(obj, color.Value));
-				colorMenuItem.MenuItems.Add(subMenu);
+				subMenu.Click += (s, e) => ColorMenuHandler(s, color.Value);
+				_colorParentMenuItem.MenuItems.Add(subMenu);
+
+				_colorMenuItems[color.Value] = subMenu;
 			}
 
 			// Ticks sub menus
-			MenuItem upTicksSubMenu = new MenuItem("Show up ticks");
-			upTicksSubMenu.Checked = ShowUpTicks;
-			upTicksSubMenu.Click += new EventHandler(UpTickMenuHandler);
-			ticksMenuItem.MenuItems.Add(upTicksSubMenu);
+			_upTicksMenuItem = new MenuItem("Show up ticks");
+			_upTicksMenuItem.Checked = ShowUpTicks;
+			_upTicksMenuItem.Click += (s, e) => ChangeShowUpTicks();
+			ticksMenuItem.MenuItems.Add(_upTicksMenuItem);
 
-			MenuItem downTicksSubMenu = new MenuItem("Show down ticks");
-			downTicksSubMenu.Checked = ShowDownTicks;
-			downTicksSubMenu.Click += new EventHandler(DownTickMenuHandler);
-			ticksMenuItem.MenuItems.Add(downTicksSubMenu);
+			_downTicksMenuItem = new MenuItem("Show down ticks");
+			_downTicksMenuItem.Checked = ShowDownTicks;
+			_downTicksMenuItem.Click += (s, e) => ChangeShowDownTicks();
+			ticksMenuItem.MenuItems.Add(_downTicksMenuItem);
 		}
 
 		private Icon GetIcon(string name)
@@ -342,49 +352,6 @@ namespace Ruler
 			}
 		}
 
-		private void ToolTipHandler(object sender, EventArgs e)
-		{
-			ShowToolTip = !ShowToolTip;
-			((MenuItem)sender).Checked = this.ShowToolTip;
-			this.SetToolTip();
-		}
-
-		private void VerticalHandler(object sender, EventArgs e)
-		{
-			ChangeOrientation();
-		}
-
-		private void FlipHandler(object sender, EventArgs e)
-		{
-			ChangeDirection();
-			Invalidate();
-		}
-
-		private void LockHandler(object sender, EventArgs e)
-		{
-			this.IsLocked = !this.IsLocked;
-			_lockMenuItem.Checked = this.IsLocked;
-			Invalidate();
-		}
-
-		private void StayOnTopHandler(object sender, EventArgs e)
-		{
-			TopMost = !TopMost;
-			((MenuItem)sender).Checked = TopMost;
-		}
-
-		private void UpTickMenuHandler(object sender, EventArgs e)
-		{
-			ShowUpTicks = !ShowUpTicks;
-			((MenuItem)sender).Checked = ShowUpTicks;
-		}
-
-		private void DownTickMenuHandler(object sender, EventArgs e)
-		{
-			ShowDownTicks = !ShowDownTicks;
-			((MenuItem)sender).Checked = ShowDownTicks;
-		}
-
 		private void DuplicateHandler(object sender, EventArgs e)
 		{
 			lock (RulerApplicationContext.CurrentContext)
@@ -398,6 +365,26 @@ namespace Ruler
 		{
 			Properties.Settings.Default.Reset();
 			new RulerInfo().CopyInto(this);
+
+			// Now update all the menus
+			_topmostMenuItem.Checked = TopMost;
+			_lockMenuItem.Checked = IsLocked;
+			_verticalMenuItem.Checked = IsVertical;
+			_flipMenuItem.Checked = IsFlipped;
+			_tooltipMenuItem.Checked = ShowToolTip;
+			_upTicksMenuItem.Checked = ShowUpTicks;
+			_downTicksMenuItem.Checked = ShowDownTicks;
+
+			// Check proper opacity and color...
+			UncheckMenuItems(_opacityParentMenuItem);
+			UncheckMenuItems(_colorParentMenuItem);
+			_opacityParentMenuItem.MenuItems[(int) (Opacity * 10) - 1].Checked = true;
+			_colorMenuItems[BackColor].Checked = true;
+
+			// Reset tooltip
+			SetToolTip();
+
+			Invalidate();
 		}
 
 		private MenuItem AddMenuItem(string text)
@@ -468,11 +455,11 @@ namespace Ruler
 			_resizeRegion = ResizeRegion.None;
 			if (_lockIconRegion.IsVisible(e.Location))
 			{
-				LockHandler(this, e);
+				ChangeLock();
 			}
 			else if (_flipIconRegion.IsVisible(e.Location))
 			{
-				FlipHandler(this, e);
+				ChangeDirection();
 			}
 
 			_dragMode = DragMode.None;
@@ -934,14 +921,51 @@ namespace Ruler
 
 		private void ChangeOrientation()
 		{
-			this.IsVertical = !IsVertical;
+			IsVertical = !IsVertical;
 			_verticalMenuItem.Checked = IsVertical;
+			Invalidate();
 		}
 
 		private void ChangeDirection()
 		{
-			this.IsFlipped = !IsFlipped;
+			IsFlipped = !IsFlipped;
 			_flipMenuItem.Checked = IsFlipped;
+			Invalidate();
+		}
+
+		private void ChangeLock()
+		{
+			IsLocked = !IsLocked;
+			_lockMenuItem.Checked = IsLocked;
+			Invalidate();
+		}
+
+		private void ChangeStayOnTop()
+		{
+			TopMost = !TopMost;
+			_topmostMenuItem.Checked = TopMost;
+			Invalidate();
+		}
+
+		private void ChangeShowTooltip()
+		{
+			ShowToolTip = !ShowToolTip;
+			_tooltipMenuItem.Checked = ShowToolTip;
+			SetToolTip();
+		}
+
+		private void ChangeShowUpTicks()
+		{
+			ShowUpTicks = !ShowUpTicks;
+			_upTicksMenuItem.Checked = ShowUpTicks;
+			Invalidate();
+		}
+
+		private void ChangeShowDownTicks()
+		{
+			ShowDownTicks = !ShowDownTicks;
+			_downTicksMenuItem.Checked = ShowDownTicks;
+			Invalidate();
 		}
 
 		private void InitializeComponent()
@@ -957,7 +981,6 @@ namespace Ruler
 			this.MinimumSize = new System.Drawing.Size(100, 55);
 			this.Name = "RulerForm";
 			this.ResumeLayout(false);
-
 		}
 	}
 }
