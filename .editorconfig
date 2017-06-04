@@ -11,6 +11,10 @@ insert_final_newline = true
 [*.Designer.cs, *.config]
 indent_style = space
 
+[*.Designer.cs]
+trim_trailing_whitespace = false
+end_of_line = crlf
+
 [*.resx, *.settings]
 indent_style = space
 indent_size = 2
