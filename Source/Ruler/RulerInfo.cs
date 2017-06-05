@@ -52,7 +52,7 @@ namespace Ruler
 			ret.IsLocked = isFlag("IsLocked");
 			ret.ShowToolTip = isFlag("ShowToolTip");
 			ret.ShowUpTicks = isFlag("ShowUpTicks");
-			ret.ShowDownTicks = isFlag("DownTicks");
+			ret.ShowDownTicks = isFlag("ShowDownTicks");
 			ret.TopMost = isFlag("TopMost");
 			ret.IsFlipped = isFlag("IsFlipped");
 
