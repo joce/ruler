@@ -531,6 +531,13 @@ namespace Ruler
 		{
 			switch (e.KeyCode)
 			{
+				case Keys.Escape:
+					if (e.Shift)
+						Application.Exit();
+					else
+						Close();
+					break;
+
 				case Keys.Right:
 				case Keys.Left:
 				case Keys.Up:
@@ -539,7 +546,10 @@ namespace Ruler
 					break;
 
 				case Keys.Space:
-					ChangeOrientation();
+					if (e.Shift)
+						ChangeDirection();
+					else
+						ChangeOrientation();
 					break;
 			}
 
