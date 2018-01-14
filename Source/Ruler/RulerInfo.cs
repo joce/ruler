@@ -13,7 +13,8 @@ namespace Ruler
 			{"yellow", Color.LightYellow},
 			{"blue", Color.LightBlue},
 			{"red", Color.LightSalmon},
-			{"green", Color.LightGreen}
+			{"green", Color.LightGreen},
+			{"purple", Color.MediumPurple }
 		};
 
 		public static IDictionary<string, Color> Colors
