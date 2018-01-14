@@ -1,0 +1,6 @@
+E:\ruler\Source\Ruler\obj\Release\Ruler.AboutForm.resources
+E:\ruler\Source\Ruler\obj\Release\Ruler.RulerForm.resources
+E:\ruler\Source\Ruler\obj\Release\Ruler.Properties.Resources.resources
+E:\ruler\Source\Ruler\obj\Release\Ruler.SetSizeForm.resources
+E:\ruler\Source\Ruler\obj\Release\Ruler.csproj.GenerateResource.Cache
+E:\ruler\Source\Ruler\obj\Release\Ruler.csproj.CoreCompileInputs.cache
