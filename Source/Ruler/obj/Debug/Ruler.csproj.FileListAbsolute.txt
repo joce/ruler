@@ -1,7 +1,6 @@
 E:\ruler\Source\Ruler\bin\Debug\ruler.exe.config
 E:\ruler\Source\Ruler\bin\Debug\ruler.exe
 E:\ruler\Source\Ruler\bin\Debug\ruler.pdb
-E:\ruler\Source\Ruler\obj\Debug\Ruler.csprojResolveAssemblyReference.cache
 E:\ruler\Source\Ruler\obj\Debug\Ruler.AboutForm.resources
 E:\ruler\Source\Ruler\obj\Debug\Ruler.RulerForm.resources
 E:\ruler\Source\Ruler\obj\Debug\Ruler.Properties.Resources.resources
@@ -11,3 +10,4 @@ E:\ruler\Source\Ruler\obj\Debug\Ruler.csproj.GenerateResource.Cache
 E:\ruler\Source\Ruler\obj\Debug\Ruler.csproj.CoreCompileInputs.cache
 E:\ruler\Source\Ruler\obj\Debug\ruler.exe
 E:\ruler\Source\Ruler\obj\Debug\ruler.pdb
+E:\ruler\Source\Ruler\obj\Debug\Ruler.csprojResolveAssemblyReference.cache

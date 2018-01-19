@@ -37,11 +37,18 @@ namespace Ruler
 
 			Color color = new Color();
 
+			//Check if color is correct
 			try
 			{
 				color = ColorTranslator.FromHtml(this.hexCode.Text);
 			}
 			catch (Exception)
+			{
+				color = ColorTranslator.FromHtml(this.originalHexCode);
+			}
+
+			//Check if color is transparent
+			if(color.A == 0)
 			{
 				color = ColorTranslator.FromHtml(this.originalHexCode);
 			}

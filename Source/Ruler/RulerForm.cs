@@ -298,6 +298,10 @@ namespace Ruler
 				_opacityParentMenuItem.MenuItems.Add(subMenu);
 			}
 
+			//Check if color is Custom
+
+			var isCustomColor = true;
+
 			// Add colors to color menus
 			foreach (var color in RulerInfo.Colors)
 			{
@@ -310,6 +314,7 @@ namespace Ruler
 				if (color.Value == BackColor)
 				{
 					subMenu.Checked = true;
+					isCustomColor = false;
 				}
 				subMenu.Click += (s, e) => ColorMenuHandler(s, color.Value);
 				_colorParentMenuItem.MenuItems.Add(subMenu);
@@ -319,6 +324,10 @@ namespace Ruler
 
 			// Add custom color option
 			MenuItem customSubMenu = new MenuItem("Custom");
+			if (isCustomColor)
+			{
+				customSubMenu.Checked = true;
+			}
 
 			customSubMenu.Click += (s, e) => CustomColorMenuHandler(s, BackColor);
 			_colorParentMenuItem.MenuItems.Add(customSubMenu);
@@ -915,6 +924,7 @@ namespace Ruler
 
 		private void CustomColorMenuHandler(object sender, Color color)
 		{
+			//Convert actual Csolor in HEX
 			CustomColorForm form = new CustomColorForm("#" + color.R.ToString("X2") + color.G.ToString("X2") + color.B.ToString("X2"));
 
 			if (this.TopMost)
