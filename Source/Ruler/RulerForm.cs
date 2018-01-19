@@ -298,6 +298,10 @@ namespace Ruler
 				_opacityParentMenuItem.MenuItems.Add(subMenu);
 			}
 
+			//Check if color is Custom
+
+			var isCustomColor = true;
+
 			// Add colors to color menus
 			foreach (var color in RulerInfo.Colors)
 			{
@@ -310,12 +314,24 @@ namespace Ruler
 				if (color.Value == BackColor)
 				{
 					subMenu.Checked = true;
+					isCustomColor = false;
 				}
 				subMenu.Click += (s, e) => ColorMenuHandler(s, color.Value);
 				_colorParentMenuItem.MenuItems.Add(subMenu);
 
 				_colorMenuItems[color.Value] = subMenu;
 			}
+
+			// Add custom color option
+			MenuItem customSubMenu = new MenuItem("Custom");
+			if (isCustomColor)
+			{
+				customSubMenu.Checked = true;
+			}
+
+			customSubMenu.Click += (s, e) => CustomColorMenuHandler(s, BackColor);
+			_colorParentMenuItem.MenuItems.Add(customSubMenu);
+			_colorMenuItems[Color.White] = customSubMenu;
 
 			// Ticks sub menus
 			_upTicksMenuItem = new MenuItem("Show up ticks");
@@ -378,7 +394,7 @@ namespace Ruler
 			// Check proper opacity and color...
 			UncheckMenuItems(_opacityParentMenuItem);
 			UncheckMenuItems(_colorParentMenuItem);
-			_opacityParentMenuItem.MenuItems[(int) (Opacity * 10) - 1].Checked = true;
+			_opacityParentMenuItem.MenuItems[(int)(Opacity * 10) - 1].Checked = true;
 			_colorMenuItems[BackColor].Checked = true;
 
 			// Reset tooltip
@@ -558,7 +574,7 @@ namespace Ruler
 
 		private void HandleMoveResizeKeystroke(KeyEventArgs e)
 		{
-			int sign = (e.KeyCode == Keys.Right || e.KeyCode == Keys.Down)? 1 : -1;
+			int sign = (e.KeyCode == Keys.Right || e.KeyCode == Keys.Down) ? 1 : -1;
 			if (e.KeyCode == Keys.Right || e.KeyCode == Keys.Left)
 			{
 				if (e.Control)
@@ -721,7 +737,7 @@ namespace Ruler
 
 		private void DrawTicks(Graphics g, int formWidth, int formHeight)
 		{
-			for (int i = 0; i < formWidth; i+=2)
+			for (int i = 0; i < formWidth; i += 2)
 			{
 				int tickHeight;
 				int pos = IsFlipped ? (formWidth - 1 - i) : i;
@@ -760,9 +776,9 @@ namespace Ruler
 					return new Point(distanceToBorder, yPlacement);
 
 				if (!ShowUpTicks)
-					return new Point(Width-(int)dimensionTextSize.Width - 2*distanceToBorder, yPlacement);
+					return new Point(Width - (int)dimensionTextSize.Width - 2 * distanceToBorder, yPlacement);
 
-				return new Point((Width - (int)dimensionTextSize.Width - distanceToBorder)/2, yPlacement);
+				return new Point((Width - (int)dimensionTextSize.Width - distanceToBorder) / 2, yPlacement);
 			}
 
 			int xPlacement = distanceToBorder;
@@ -771,7 +787,7 @@ namespace Ruler
 
 			// For very slim rulers, center the labels in height
 			if ((Thickness - (Font.Height * 2)) <= 2 * distanceToBorder)
-				return new Point(xPlacement, (Thickness / 2)- Font.Height);
+				return new Point(xPlacement, (Thickness / 2) - Font.Height);
 
 			if (!ShowDownTicks)
 				return new Point(xPlacement, Thickness - (Font.Height * 2 + distanceToBorder));
@@ -779,7 +795,7 @@ namespace Ruler
 			if (!ShowUpTicks)
 				return new Point(xPlacement, distanceToBorder);
 
-			return new Point(xPlacement, (Thickness / 2)- Font.Height);
+			return new Point(xPlacement, (Thickness / 2) - Font.Height);
 		}
 
 		private int GetCursorPos()
@@ -871,7 +887,7 @@ namespace Ruler
 			if (ShowUpTicks && ShowDownTicks && formHeight <= 60)
 			{
 				// When space is limited and we have to draw labels for both up and down ticks, only draw in the middle of the ruler
-				g.DrawString(text, Font, new SolidBrush(_TickColor), xPos, (formHeight-FontHeight)/2);
+				g.DrawString(text, Font, new SolidBrush(_TickColor), xPos, (formHeight - FontHeight) / 2);
 				return;
 			}
 
@@ -904,6 +920,25 @@ namespace Ruler
 			UncheckMenuItems(mi.Parent);
 			BackColor = color;
 			mi.Checked = true;
+		}
+
+		private void CustomColorMenuHandler(object sender, Color color)
+		{
+			//Convert actual Csolor in HEX
+			CustomColorForm form = new CustomColorForm("#" + color.R.ToString("X2") + color.G.ToString("X2") + color.B.ToString("X2"));
+
+			if (this.TopMost)
+			{
+				form.TopMost = true;
+			}
+
+			if (form.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+			{
+				MenuItem mi = (MenuItem)sender;
+				UncheckMenuItems(mi.Parent);
+				BackColor = form.GetNewColor();
+				mi.Checked = true;
+			}
 		}
 
 		private void MenuHandler(object sender, EventArgs e)

@@ -6,7 +6,7 @@ Fork of small utility application for Windows called Ruler.
 <img src="https://github.com/andrijac/ruler/raw/master/img/ruler.gif">
 
 Download working version:
-https://github.com/andrijac/ruler/tree/master/Bin/Debug
+https://github.com/juanrarodriguez18/ruler/blob/master/Source/Ruler/bin/Debug/ruler.exe
 
 Original project was developed by Jeff Key:
 
@@ -33,3 +33,15 @@ I wanted to add some features and to have it hosted on GitHub.
 Support for .NET 2.0 is kept.
 
 *Gifs are made using LICEcap http://www.cockos.com/licecap/*
+
+<a name="othernewfeatures" href="#othernewfeatures">#</a>Other new features:
+
+- **Buttons** - added buttons for lock and flip the rule.
+
+- **Shortcuts** - added shortcuts for change rule's orientation and flip it and make it's use more easy.
+
+- **Colors** - put color in your life! The new rules has some predefined colors and the option to put the custom color that you want.
+
+- **Fix bugs** - of course some bugs have also been fixed ;).
+
+
