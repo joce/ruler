@@ -1023,7 +1023,7 @@ namespace Ruler
 			this.ClientSize = new System.Drawing.Size(100, 55);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-			this.MinimumSize = new System.Drawing.Size(100, 55);
+			this.MinimumSize = new System.Drawing.Size(10, 10);
 			this.Name = "RulerForm";
 			this.ResumeLayout(false);
 		}
