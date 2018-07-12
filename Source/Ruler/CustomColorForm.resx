@@ -117,38 +117,4 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="richTextBox.Text" xml:space="preserve">
-    <value>Ruler {VERSION} by Jocelyn legault
-https://github.com/joce/ruler
-
-Based on the original Ruler 1.4 by Jeff Key
-www.sliver.com
-
-With contributions from:
-
-Andrija Cacanovic
-https://github.com/andrijac/ruler
-  - Duplicate ruler
-  - Lock ruler
-  - Set size dialog
-
-Nelson Polanco
-https://github.com/decodigo/ruler
-  - Colored rulers
-  - Better label placement for vertical rulers
-  - Lock icon
-
-Kris Erickson
-https://github.com/kriserickson/ruler
-  - Double-click to rotate ruler
-
-Ishmaeel
-https://github.com/Ishmaeel/ruler
-  - This about box
-
-Juanra Rodriguez
-https://github.com/juanrarodriguez18/ruler
-  - Added purple and orange color
-  - Added custom color option with HEX code</value>
-  </data>
 </root>

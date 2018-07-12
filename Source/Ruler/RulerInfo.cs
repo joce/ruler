@@ -13,7 +13,9 @@ namespace Ruler
 			{"yellow", Color.LightYellow},
 			{"blue", Color.LightBlue},
 			{"red", Color.LightSalmon},
-			{"green", Color.LightGreen}
+			{"green", Color.LightGreen},
+			{"purple", Color.MediumPurple },
+			{"orange", Color.Orange }
 		};
 
 		public static IDictionary<string, Color> Colors
@@ -26,7 +28,7 @@ namespace Ruler
 			var ret = s_ColorDict.FirstOrDefault(kvp => kvp.Value == color);
 			if (string.IsNullOrEmpty(ret.Key))
 			{
-				return "White";
+				return "CUSTOM";
 			}
 			return ret.Key;
 		}
@@ -36,9 +38,14 @@ namespace Ruler
 			var ret = s_ColorDict.FirstOrDefault(kvp => kvp.Key == name);
 			if (string.IsNullOrEmpty(ret.Key))
 			{
-				return Color.White;
+				return ColorTranslator.FromHtml(name);
 			}
 			return ret.Value;
+		}
+
+		public static string GetHexFromColor(Color color)
+		{
+			return "#" + color.R.ToString("X2") + color.G.ToString("X2") + color.B.ToString("X2");
 		}
 
 		public static RulerInfo GetDefaultRulerInfo()
@@ -61,7 +68,7 @@ namespace Ruler
 			ret.Opacity = double.Parse(Properties.Settings.Default.Properties["Opacity"]?.DefaultValue.ToString() ?? string.Empty);
 
 			string defaultColor = Properties.Settings.Default.Properties["BackColor"]?.DefaultValue.ToString() ?? string.Empty;
-			ret.BackColor = Colors.ContainsKey(defaultColor) ? Colors[defaultColor] : Color.White;
+			ret.BackColor = Colors.ContainsKey(defaultColor) ? Colors[defaultColor] : ColorTranslator.FromHtml(defaultColor);
 
 			return ret;
 		}
@@ -124,7 +131,7 @@ namespace Ruler
 			Properties.Settings.Default.ShowToolTip = ruler.ShowToolTip;
 			Properties.Settings.Default.IsLocked = ruler.IsLocked;
 			Properties.Settings.Default.TopMost = ruler.TopMost;
-			Properties.Settings.Default.BackColor = RulerInfo.GetNameFromColor(ruler.BackColor);
+			Properties.Settings.Default.BackColor = RulerInfo.GetNameFromColor(ruler.BackColor)=="CUSTOM"?RulerInfo.GetHexFromColor(ruler.BackColor):RulerInfo.GetNameFromColor(ruler.BackColor);
 			Properties.Settings.Default.ShowUpTicks = ruler.ShowUpTicks;
 			Properties.Settings.Default.ShowDownTicks = ruler.ShowDownTicks;
 			Properties.Settings.Default.IsFlipped = ruler.IsFlipped;
